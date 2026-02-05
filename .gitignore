@@ -1,0 +1,47 @@
+﻿############################
+# Build Folders
+############################
+bin/
+obj/
+
+############################
+# User-specific files
+############################
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+############################
+# Visual Studio / VS Code
+############################
+.vs/
+.vscode/
+
+############################
+# Logs
+############################
+*.log
+
+############################
+# ASP.NET Core
+############################
+appsettings.Development.json
+appsettings.Local.json
+
+############################
+# Publish Output
+############################
+publish/
+
+############################
+# Node (If Angular or Frontend Exists)
+############################
+node_modules/
+dist/
+
+############################
+# OS Generated Files
+############################
+.DS_Store
+Thumbs.db
