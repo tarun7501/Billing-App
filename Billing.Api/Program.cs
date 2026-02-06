@@ -1,4 +1,6 @@
+using Billing.Api.Contracts;
 using Billing.Api.Infrastructure.Data;
+using Billing.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +13,14 @@ builder.Services.AddSwaggerGen();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+//Adding the connection string for database.
 builder.Services.AddDbContext<BillingDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//Adding Services for Repositories
+builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+builder.Services.AddScoped<ILaminationRepository, LaminationRepository>();
 
 var app = builder.Build();
 
