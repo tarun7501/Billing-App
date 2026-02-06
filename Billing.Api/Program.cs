@@ -23,6 +23,7 @@ using (var scope = app.Services.CreateScope())
         .GetRequiredService<BillingDbContext>();
 
     dbContext.Database.Migrate();
+    await DbSeeder.SeedAsync(dbContext);
 }
 
 // Configure the HTTP request pipeline.
