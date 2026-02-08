@@ -1,0 +1,95 @@
+<div class="border-2 border-emerald-200 rounded-lg bg-emerald-50/30 mb-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center p-4 cursor-pointer" (click)="toggle()">
+        <div class="flex items-center gap-2">
+            <h3 class="font-semibold text-lg text-emerald-800">3. Photo With Lamination</h3>
+            <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded"> Fixed Price per Copy </span>
+        </div>
+        <span>{{ open ? '▼' : '▶' }}</span>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="open" class="p-4 border-t border-emerald-200 space-y-3">
+        <button (click)="addRow()" class="px-3 py-1 border border-emerald-300 rounded text-sm hover:bg-emerald-100">
+            + Add Row
+        </button>
+
+        <div *ngFor="let item of items; let i = index" class="bg-white rounded-lg p-4 border border-emerald-200">
+            <div class="grid grid-cols-12 gap-3 items-start mb-3">
+                <!-- Photo Size -->
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">Photo Size</label>
+                    <select
+                        [(ngModel)]="item.size"
+                        (change)="calculate(item)"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    >
+                        <option *ngFor="let s of sizes" [value]="s">{{ s }}</option>
+                    </select>
+                </div>
+
+                <!-- Lamination Type -->
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">Lamination Type</label>
+                    <select
+                        [(ngModel)]="item.type"
+                        (change)="calculate(item)"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    >
+                        <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+                    </select>
+                </div>
+
+                <!-- Finish -->
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">Finish</label>
+                    <select
+                        [(ngModel)]="item.finish"
+                        (change)="calculate(item)"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    >
+                        <option *ngFor="let f of finishes" [value]="f">{{ f }}</option>
+                    </select>
+                </div>
+
+                <!-- Quantity -->
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">Quantity</label>
+                    <input
+                        type="number"
+                        min="1"
+                        [(ngModel)]="item.qty"
+                        (input)="calculate(item)"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    />
+                </div>
+
+                <!-- Row Total -->
+                <div class="col-span-3">
+                    <label class="text-xs font-medium text-slate-600">Row Total</label>
+                    <input
+                        [value]="'₹' + item.total"
+                        disabled
+                        class="mt-1 w-full border rounded px-2 py-1 bg-slate-50 font-semibold"
+                    />
+                </div>
+
+                <!-- Remove -->
+                <div class="col-span-1 delete-btn">
+                    <button (click)="remove(i)" class="text-red-600 hover:text-red-800">✕</button>
+                </div>
+            </div>
+
+            <!-- Price Summary -->
+            <div class="bg-emerald-50 rounded p-2 border border-emerald-100 text-xs">
+                <span class="font-semibold text-emerald-700"> Price per copy: ₹{{ item.unitPrice }} </span>
+                — {{ item.qty }} × ₹{{ item.unitPrice }} = ₹{{ item.total }}
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="items.length === 0" class="text-sm text-slate-500 text-center py-4">
+            No items added. Click "Add Row" to add items.
+        </div>
+    </div>
+</div>

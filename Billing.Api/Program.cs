@@ -22,7 +22,22 @@ builder.Services.AddDbContext<BillingDbContext>(options =>
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 builder.Services.AddScoped<ILaminationRepository, LaminationRepository>();
 
+//Connecting Front End Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAngular");
 
 // AUTO APPLY MIGRATIONS
 using (var scope = app.Services.CreateScope())

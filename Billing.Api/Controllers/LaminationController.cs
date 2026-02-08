@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Billing.Api.Controllers
 {
+    [ApiController]
+    [Route("api/lamination")]
     public class LaminationController : ControllerBase
     {
         private readonly ILaminationRepository _laminationRepository;

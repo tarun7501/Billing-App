@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Billing.Api.Controllers
 {
+    [ApiController]
+    [Route("api/photo")]
     public class PhotoController : ControllerBase
     {
         private readonly IPhotoRepository _photoRepository;
