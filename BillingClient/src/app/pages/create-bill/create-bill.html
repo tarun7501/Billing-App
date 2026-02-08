@@ -1,0 +1,128 @@
+<div class="p-8 max-w-6xl">
+    <!-- Header -->
+    <div class="flex items-center gap-4 mb-8">
+        <button (click)="cancel()" class="p-2 rounded hover:bg-slate-100">←</button>
+        <div>
+            <h1 class="text-3xl font-semibold text-slate-800">Create New Bill</h1>
+            <p class="text-slate-500 mt-1">Fill in the details to generate a bill</p>
+        </div>
+    </div>
+
+    <!-- ================= Customer Details ================= -->
+    <div class="bg-white border border-slate-200 rounded-lg p-6 mb-6">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4">Customer Details</h2>
+
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <label class="text-sm font-medium text-slate-600"> Customer Name * </label>
+                <input
+                    [(ngModel)]="customerName"
+                    placeholder="Enter customer name"
+                    class="mt-1.5 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+            </div>
+
+            <div>
+                <label class="text-sm font-medium text-slate-600"> Phone Number * </label>
+                <input
+                    [(ngModel)]="phone"
+                    placeholder="+91 XXXXX XXXXX"
+                    class="mt-1.5 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+            </div>
+
+            <div>
+                <label class="text-sm font-medium text-slate-600"> Email Address </label>
+                <input
+                    [(ngModel)]="email"
+                    type="email"
+                    placeholder="customer@example.com"
+                    class="mt-1.5 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Bill Information ================= -->
+    <div class="bg-white border border-slate-200 rounded-lg p-6 mb-6">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4">Bill Information</h2>
+
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <label class="text-sm font-medium text-slate-600"> Bill Number </label>
+                <input [value]="billNumber" disabled class="mt-1.5 w-full border rounded-lg px-3 py-2 bg-slate-50" />
+            </div>
+
+            <div>
+                <label class="text-sm font-medium text-slate-600"> Bill Date </label>
+                <input type="date" [(ngModel)]="billDate" class="mt-1.5 w-full border rounded-lg px-3 py-2" />
+            </div>
+
+            <div>
+                <label class="text-sm font-medium text-slate-600"> Status </label>
+                <select [(ngModel)]="status" class="mt-1.5 w-full border rounded-lg px-3 py-2">
+                    <option value="Pending">Pending</option>
+                    <option value="Cleared">Cleared</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Bill Items ================= -->
+    <div class="bg-white border border-slate-200 rounded-lg p-6 mb-6">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4">Bill Items</h2>
+        <app-mobile-photo-section (subtotalChange)="mobileSubtotal = $event"> </app-mobile-photo-section>
+        <app-studio-photo-section (subtotalChange)="studioSubtotal = $event"> </app-studio-photo-section>
+        <app-lamination-photo-section (subtotalChange)="laminationSubtotal = $event"> </app-lamination-photo-section>
+    </div>
+
+    <!-- ================= Billing Summary ================= -->
+    <div class="bg-blue-50 border-2 border-blue-100 rounded-lg p-6 mt-6">
+        <h2 class="text-lg font-semibold text-blue-900 mb-4">Billing Summary</h2>
+
+        <div class="space-y-4">
+            <div class="flex justify-between text-lg">
+                <span class="text-slate-600">Subtotal Amount:</span>
+                <span class="font-semibold">₹{{ subtotal }}</span>
+            </div>
+
+            <hr class="border-blue-200" />
+
+            <div class="flex justify-between items-center">
+                <span class="text-slate-600">Discount Amount:</span>
+                <input type="number" [(ngModel)]="discount" class="w-40 border rounded-lg px-2 py-1 text-right" />
+            </div>
+
+            <hr class="border-blue-200" />
+
+            <div class="flex justify-between text-xl">
+                <span class="font-semibold">Total Amount:</span>
+                <span class="font-bold text-blue-600"> ₹{{ totalAmount }} </span>
+            </div>
+
+            <hr class="border-blue-200" />
+
+            <div class="flex justify-between items-center">
+                <span class="text-slate-600">Advance Amount:</span>
+                <input type="number" [(ngModel)]="advanceAmount" class="w-40 border rounded-lg px-2 py-1 text-right" />
+            </div>
+
+            <hr class="border-blue-200" />
+
+            <div class="flex justify-between text-xl">
+                <span class="font-semibold">Balance Amount:</span>
+                <span class="font-bold" [ngClass]="balanceAmount > 0 ? 'text-amber-600' : 'text-green-600'">
+                    ₹{{ balanceAmount }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Actions ================= -->
+    <div class="flex justify-end gap-3 mt-6">
+        <button (click)="cancel()" class="px-6 py-3 border rounded-lg hover:bg-slate-100">Cancel</button>
+        <button (click)="save()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Save Bill
+        </button>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<aside class="w-[100%] h-[100%] bg-slate-900 text-white flex flex-col min-h-screen">
+    <!-- Studio Branding -->
+    <div class="p-8 border-b border-slate-700">
+        <div class="flex flex-col items-center text-center space-y-4">
+            <div
+                class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg"
+            >
+                <mat-icon>photo_camera</mat-icon>
+            </div>
+
+            <div>
+                <h1 class="text-2xl font-semibold tracking-tight">Rajan Digital Studio</h1>
+                <p class="text-slate-400 text-sm mt-1">Professional Photography</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 p-6">
+        <ul class="space-y-2">
+            <!-- Dashboard -->
+            <li>
+                <a
+                    routerLink="/dashboard"
+                    routerLinkActive="bg-blue-600 text-white shadow-lg"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-slate-300 hover:bg-slate-700 hover:text-white"
+                >
+                    <mat-icon class="w-5 h-5">dashboard</mat-icon>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+            </li>
+
+            <!-- Customers -->
+            <li>
+                <a
+                    routerLink="/customers"
+                    routerLinkActive="bg-blue-600 text-white shadow-lg"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-slate-300 hover:bg-slate-700 hover:text-white"
+                >
+                    <mat-icon class="w-5 h-5">groups</mat-icon>
+                    <span class="font-medium">Customers</span>
+                </a>
+            </li>
+
+            <!-- Bills -->
+            <li>
+                <a
+                    routerLink="/bills"
+                    routerLinkActive="bg-blue-600 text-white shadow-lg"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-slate-300 hover:bg-slate-700 hover:text-white"
+                >
+                    <mat-icon class="w-5 h-5">receipt</mat-icon>
+                    <span class="font-medium">Bills</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Footer -->
+    <div class="p-6 border-t border-slate-700">
+        <p class="text-slate-400 text-xs text-center">© 2026 Rajan Digital Studio</p>
+    </div>
+</aside>
