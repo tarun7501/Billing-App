@@ -35,9 +35,20 @@ builder.Services.AddCors(options =>
         });
 });
 
+//Added for all the api calls
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder.SetIsOriginAllowed(_ => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
+
 var app = builder.Build();
 
 app.UseCors("AllowAngular");
+app.UseCors("CorsPolicy");
 
 // AUTO APPLY MIGRATIONS
 using (var scope = app.Services.CreateScope())
