@@ -3,7 +3,7 @@
     public class PhotoSize
     {
         public int Id { get; set; }
-        public string Label { get; set; }
+        public required string Label { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

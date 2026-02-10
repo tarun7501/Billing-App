@@ -98,10 +98,10 @@ namespace Billing.Api.Migrations
                         .HasColumnType("integer");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("numeric(10,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("numeric(10,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -168,32 +168,6 @@ namespace Billing.Api.Migrations
                     b.ToTable("LaminationFinishes");
                 });
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationFinishPrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("ExtraPrice")
-                        .HasColumnType("numeric(10,2)");
-
-                    b.Property<int>("LaminationFinishId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PhotoSizeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LaminationFinishId");
-
-                    b.HasIndex("PhotoSizeId");
-
-                    b.ToTable("LaminationFinishPrices");
-                });
-
             modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationType", b =>
                 {
                     b.Property<int>("Id")
@@ -212,41 +186,6 @@ namespace Billing.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LaminationTypes");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoPricing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("numeric(10,2)");
-
-                    b.Property<decimal>("ExtraCopyPrice")
-                        .HasColumnType("numeric(10,2)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("MinimumCopies")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PhotoServiceId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PhotoSizeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhotoServiceId");
-
-                    b.HasIndex("PhotoSizeId");
-
-                    b.ToTable("PhotoPricings");
                 });
 
             modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoService", b =>
@@ -333,44 +272,6 @@ namespace Billing.Api.Migrations
                     b.Navigation("LaminationFinish");
 
                     b.Navigation("LaminationType");
-
-                    b.Navigation("PhotoService");
-
-                    b.Navigation("PhotoSize");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationFinishPrice", b =>
-                {
-                    b.HasOne("Billing.Api.Domain.Entities.LaminationFinish", "LaminationFinish")
-                        .WithMany()
-                        .HasForeignKey("LaminationFinishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoSize", "PhotoSize")
-                        .WithMany()
-                        .HasForeignKey("PhotoSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LaminationFinish");
-
-                    b.Navigation("PhotoSize");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoPricing", b =>
-                {
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoService", "PhotoService")
-                        .WithMany()
-                        .HasForeignKey("PhotoServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoSize", "PhotoSize")
-                        .WithMany()
-                        .HasForeignKey("PhotoSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("PhotoService");
 

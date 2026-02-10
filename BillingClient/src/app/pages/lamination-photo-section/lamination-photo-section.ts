@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CreateBillItemPayload } from '../../models/bill.model';
 
 interface LaminationPricing {
     size: string;
@@ -18,6 +19,10 @@ interface LaminationPricing {
 })
 export class LaminationPhotoSection {
     @Output() subtotalChange = new EventEmitter<number>();
+    @Output() itemsChange = new EventEmitter<CreateBillItemPayload[]>();
+    emitChanges() {
+        this.itemsChange.emit(this.items);
+    }
 
     open = true;
 
@@ -48,6 +53,7 @@ export class LaminationPhotoSection {
     ];
 
     items: any[] = [];
+    sum: any;
 
     toggle() {
         this.open = !this.open;
@@ -82,15 +88,17 @@ export class LaminationPhotoSection {
         this.calculate(item); // 🔥 auto price on add
         this.items.push(item);
         this.emitSubtotal();
+        this.emitChanges(); // 🔥 emit changes on add
     }
 
     remove(index: number) {
         this.items.splice(index, 1);
         this.emitSubtotal();
+        this.emitChanges(); // 🔥 emit changes on remove
     }
 
     emitSubtotal() {
-        const sum = this.items.reduce((s, i) => s + i.total, 0);
-        this.subtotalChange.emit(sum);
+        this.sum = this.items.reduce((s, i) => s + i.total, 0);
+        this.subtotalChange.emit(this.sum);
     }
 }

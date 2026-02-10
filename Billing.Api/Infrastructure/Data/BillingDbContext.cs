@@ -11,17 +11,17 @@ namespace Billing.Api.Infrastructure.Data
         public DbSet<Customer> Customers => Set<Customer>();
         public DbSet<PhotoService> PhotoServices => Set<PhotoService>();
         public DbSet<PhotoSize> PhotoSizes => Set<PhotoSize>();
-        public DbSet<PhotoPricing> PhotoPricings => Set<PhotoPricing>();
 
         public DbSet<LaminationType> LaminationTypes => Set<LaminationType>();
         public DbSet<LaminationFinish> LaminationFinishes => Set<LaminationFinish>();
-        public DbSet<LaminationFinishPrice> LaminationFinishPrices => Set<LaminationFinishPrice>();
 
         public DbSet<Bill> Bills => Set<Bill>();
         public DbSet<BillItem> BillItems => Set<BillItem>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Customer>()
                 .HasIndex(x => x.PhoneNumber)
                 .IsUnique();
@@ -30,25 +30,18 @@ namespace Billing.Api.Infrastructure.Data
                 .HasIndex(x => x.BillNumber)
                 .IsUnique();
 
-            modelBuilder.Entity<PhotoPricing>()
-                .Property(x => x.BasePrice)
-                .HasColumnType("numeric(10,2)");
-
-            modelBuilder.Entity<PhotoPricing>()
-                .Property(x => x.ExtraCopyPrice)
-                .HasColumnType("numeric(10,2)");
-
-            modelBuilder.Entity<LaminationFinishPrice>()
-                .Property(x => x.ExtraPrice)
-                .HasColumnType("numeric(10,2)");
+            modelBuilder.Entity<Bill>()
+                .HasMany(b => b.Items)
+                .WithOne(i => i.Bill)
+                .HasForeignKey(i => i.BillId);
 
             modelBuilder.Entity<BillItem>()
                 .Property(x => x.UnitPrice)
-                .HasColumnType("numeric(10,2)");
+                .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<BillItem>()
                 .Property(x => x.TotalPrice)
-                .HasColumnType("numeric(10,2)");
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

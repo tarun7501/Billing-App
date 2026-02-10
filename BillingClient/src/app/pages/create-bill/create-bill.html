@@ -71,9 +71,23 @@
     <!-- ================= Bill Items ================= -->
     <div class="bg-white border border-slate-200 rounded-lg p-6 mb-6">
         <h2 class="text-lg font-semibold text-slate-800 mb-4">Bill Items</h2>
-        <app-mobile-photo-section (subtotalChange)="mobileSubtotal = $event"> </app-mobile-photo-section>
-        <app-studio-photo-section (subtotalChange)="studioSubtotal = $event"> </app-studio-photo-section>
-        <app-lamination-photo-section (subtotalChange)="laminationSubtotal = $event"> </app-lamination-photo-section>
+        <app-mobile-photo-section
+            (itemsChange)="onMobileItemsChange($event, mobileSubtotal)"
+            (subtotalChange)="mobileSubtotal = $event"
+        >
+        </app-mobile-photo-section>
+
+        <app-studio-photo-section
+            (itemsChange)="onStudioItemsChange($event, studioSubtotal)"
+            (subtotalChange)="studioSubtotal = $event"
+        >
+        </app-studio-photo-section>
+
+        <app-lamination-photo-section
+            (itemsChange)="onLaminationItemsChange($event, laminationSubtotal)"
+            (subtotalChange)="laminationSubtotal = $event"
+        >
+        </app-lamination-photo-section>
     </div>
 
     <!-- ================= Billing Summary ================= -->

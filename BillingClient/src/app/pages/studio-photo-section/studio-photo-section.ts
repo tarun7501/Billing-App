@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CreateBillItemPayload } from '../../models/bill.model';
 
 interface StudioPricing {
     size: string;
@@ -18,6 +19,11 @@ interface StudioPricing {
 })
 export class StudioPhotoSection {
     @Output() subtotalChange = new EventEmitter<number>();
+    @Output() itemsChange = new EventEmitter<CreateBillItemPayload[]>();
+    emitChanges() {
+        this.itemsChange.emit(this.items);
+        this.subtotalChange.emit(this.sum);
+    }
 
     open = true;
 
@@ -30,6 +36,7 @@ export class StudioPhotoSection {
     ];
 
     items: any[] = [];
+    sum: any;
 
     toggle() {
         this.open = !this.open;
@@ -62,15 +69,17 @@ export class StudioPhotoSection {
         });
 
         this.emitSubtotal();
+        this.emitChanges();
     }
 
     remove(index: number) {
         this.items.splice(index, 1);
         this.emitSubtotal();
+        this.emitChanges();
     }
 
     emitSubtotal() {
-        const sum = this.items.reduce((s, i) => s + i.total, 0);
-        this.subtotalChange.emit(sum);
+        this.sum = this.items.reduce((s, i) => s + i.total, 0);
+        this.subtotalChange.emit(this.sum);
     }
 }
