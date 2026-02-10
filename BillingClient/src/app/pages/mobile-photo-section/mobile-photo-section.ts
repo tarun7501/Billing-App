@@ -70,6 +70,7 @@ export class MobilePhotoSection implements OnInit {
     }
 
     onSizeChange(item: MobileUIItem) {
+        item.sizeId = Number(item.sizeId);
         const size = this.sizes.find((s) => s.id === item.sizeId);
         if (!size) return;
 

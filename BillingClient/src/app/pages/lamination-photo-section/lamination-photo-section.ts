@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CreateBillItemPayload } from '../../models/bill.model';
 
-interface LaminationPricing {
+interface LaminationUIItem {
     size: string;
-    type: string;
+    type: 'Bit' | 'Frame';
     finish: string;
-    price: number;
+    qty: number;
+    unitPrice: number;
+    total: number;
 }
 
 @Component({
@@ -20,85 +22,145 @@ interface LaminationPricing {
 export class LaminationPhotoSection {
     @Output() subtotalChange = new EventEmitter<number>();
     @Output() itemsChange = new EventEmitter<CreateBillItemPayload[]>();
-    emitChanges() {
-        this.itemsChange.emit(this.items);
-    }
 
     open = true;
+    photoServiceId = 3; // Photo With Lamination
 
-    sizes = ['4x6', '5x7', '6x9', '8x10'];
-    types = ['Frame', 'Bit'];
-    finishes = ['Glossy', 'Matte'];
-
-    pricingRules: LaminationPricing[] = [
-        { size: '4x6', type: 'Frame', finish: 'Glossy', price: 50 },
-        { size: '4x6', type: 'Frame', finish: 'Matte', price: 60 },
-        { size: '4x6', type: 'Bit', finish: 'Glossy', price: 80 },
-        { size: '4x6', type: 'Bit', finish: 'Matte', price: 90 },
-
-        { size: '5x7', type: 'Frame', finish: 'Glossy', price: 70 },
-        { size: '5x7', type: 'Frame', finish: 'Matte', price: 80 },
-        { size: '5x7', type: 'Bit', finish: 'Glossy', price: 100 },
-        { size: '5x7', type: 'Bit', finish: 'Matte', price: 110 },
-
-        { size: '6x9', type: 'Frame', finish: 'Glossy', price: 100 },
-        { size: '6x9', type: 'Frame', finish: 'Matte', price: 110 },
-        { size: '6x9', type: 'Bit', finish: 'Glossy', price: 200 },
-        { size: '6x9', type: 'Bit', finish: 'Matte', price: 300 },
-
-        { size: '8x10', type: 'Frame', finish: 'Glossy', price: 150 },
-        { size: '8x10', type: 'Frame', finish: 'Matte', price: 160 },
-        { size: '8x10', type: 'Bit', finish: 'Glossy', price: 250 },
-        { size: '8x10', type: 'Bit', finish: 'Matte', price: 280 },
+    // Sizes
+    sizes = [
+        '6x9', '8x12', '10x15', '12x18',
+        '16x24', '20x24', '20x30', '20x40',
+        '24x24', '24x30', '24x36', '24x40',
     ];
 
-    items: any[] = [];
-    sum: any;
+    types: Array<'Frame' | 'Bit'> = ['Frame', 'Bit'];
+    finishes = ['Matte', 'Glossy', 'Glitter', '3D', 'Canvas'];
+
+    // 🔹 Base price by size & type
+    private basePrice: Record<string, { Bit?: number; Frame: number }> = {
+        '6x9': { Bit: 250, Frame: 350 },
+        '8x12': { Bit: 400, Frame: 500 },
+        '10x15': { Bit: 600, Frame: 800 },
+        '12x18': { Bit: 800, Frame: 1200 },
+        '16x24': { Frame: 2600 },
+        '20x24': { Frame: 3300 },
+        '20x30': { Frame: 3600 },
+        '20x40': { Frame: 4000 },
+        '24x24': { Frame: 4500 },
+        '24x30': { Frame: 5000 },
+        '24x36': { Frame: 5500 },
+        '24x40': { Frame: 6000 },
+    };
+
+    // 🔹 Finish surcharge by size (non-Matte only)
+    private finishExtraBySize: Record<string, number> = {
+        '6x9': 100,
+        '8x12': 100,
+        '10x15': 150,
+        '12x18': 200,
+        '16x24': 300,
+        '20x24': 400,
+        '20x30': 400,
+        '20x40': 400,
+        '24x24': 400,
+        '24x30': 400,
+        '24x36': 400,
+        '24x40': 400,
+    };
+
+    items: LaminationUIItem[] = [];
+    sum = 0;
 
     toggle() {
         this.open = !this.open;
     }
 
-    calculate(item: any) {
-        const rule = this.pricingRules.find(
-            (r) => r.size === item.size && r.type === item.type && r.finish === item.finish,
-        );
-
-        if (rule) {
-            item.unitPrice = rule.price;
-            item.total = rule.price * item.qty;
-        } else {
-            item.unitPrice = 0;
-            item.total = 0;
-        }
-
-        this.emitSubtotal();
-    }
-
     addRow() {
-        const item = {
-            size: this.sizes[0],
-            type: this.types[0],
-            finish: this.finishes[0],
+        const item: LaminationUIItem = {
+            size: '6x9',
+            type: 'Frame',
+            finish: 'Matte', // 🔥 default
             qty: 1,
             unitPrice: 0,
             total: 0,
         };
 
-        this.calculate(item); // 🔥 auto price on add
+        this.calculate(item);
         this.items.push(item);
-        this.emitSubtotal();
-        this.emitChanges(); // 🔥 emit changes on add
+        this.emitAll();
     }
 
     remove(index: number) {
         this.items.splice(index, 1);
-        this.emitSubtotal();
-        this.emitChanges(); // 🔥 emit changes on remove
+        this.emitAll();
     }
 
-    emitSubtotal() {
+    calculate(item: LaminationUIItem) {
+        // 🔥 Bit allowed only for smaller sizes
+        if (item.type === 'Bit' && !this.basePrice[item.size].Bit) {
+            item.type = 'Frame';
+        }
+
+        const base =
+            item.type === 'Bit'
+                ? this.basePrice[item.size].Bit!
+                : this.basePrice[item.size].Frame;
+
+        // 🔥 Finish logic
+        const finishExtra =
+            item.finish === 'Matte'
+                ? 0
+                : this.finishExtraBySize[item.size] ?? 0;
+
+        item.unitPrice = base + finishExtra;
+        item.total = item.unitPrice * item.qty;
+
+        this.emitAll();
+    }
+
+    private emitAll() {
         this.sum = this.items.reduce((s, i) => s + i.total, 0);
         this.subtotalChange.emit(this.sum);
+
+        const payload: CreateBillItemPayload[] = this.items.map(i => ({
+            photoServiceId: this.photoServiceId,
+            photoSizeId: this.mapSizeToId(i.size),
+            laminationTypeId: i.type === 'Bit' ? 1 : 2,
+            laminationFinishId: this.mapFinishToId(i.finish),
+            quantity: i.qty,
+            unitPrice: i.unitPrice,
+        }));
+
+        this.itemsChange.emit(payload);
+    }
+
+    // 🔧 Temporary ID mapping (API later)
+    private mapSizeToId(size: string): number {
+        const map: Record<string, number> = {
+            '6x9': 3,
+            '8x12': 4,
+            '10x15': 5,
+            '12x18': 6,
+            '16x24': 7,
+            '20x24': 8,
+            '20x30': 9,
+            '20x40': 10,
+            '24x24': 11,
+            '24x30': 12,
+            '24x36': 13,
+            '24x40': 14,
+        };
+        return map[size];
+    }
+
+    private mapFinishToId(finish: string): number {
+        const map: Record<string, number> = {
+            Matte: 1,
+            Glossy: 2,
+            Glitter: 3,
+            '3D': 4,
+            Canvas: 5,
+        };
+        return map[finish];
     }
 }

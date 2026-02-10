@@ -16,4 +16,8 @@ export class BillService {
     getBill(id: number) {
         return this.http.get(`${this.baseUrl}/${id}`);
     }
+
+    getAllBills() {
+        return this.http.get(`${this.baseUrl}/all`);
+    }
 }

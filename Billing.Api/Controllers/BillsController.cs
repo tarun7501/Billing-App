@@ -40,7 +40,7 @@ namespace Billing.Api.Controllers
             var bill = new Bill
             {
                 BillNumber = GenerateBillNumber(),
-                BillDate = dto.BillDate,
+                BillDate = DateTime.SpecifyKind(dto.BillDate, DateTimeKind.Local).ToUniversalTime(),
                 Customer = customer,
                 DiscountAmount = dto.DiscountAmount,
                 AdvanceAmount = dto.AdvanceAmount
@@ -126,6 +126,12 @@ namespace Billing.Api.Controllers
             };
 
             return Ok(result);
+        }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<List<Bill>>> GetAllBills()
+        {
+            return await _context.Bills.ToListAsync();
         }
 
 

@@ -21,7 +21,7 @@
                     <label class="text-xs font-medium text-slate-600"> Photo Size </label>
                     <select
                         [(ngModel)]="item.size"
-                        (change)="calculateTotal(item)"
+                        (change)="onSizeChange(item)"
                         class="mt-1 w-full border rounded px-2 py-1"
                     >
                         <option *ngFor="let p of pricingRules" [value]="p.size">{{ p.size }}</option>
@@ -39,7 +39,7 @@
                         type="number"
                         [min]="getPricing(item.size).minCopies"
                         [(ngModel)]="item.copies"
-                        (input)="calculateTotal(item)"
+                        (input)="onCopiesChange(item)"
                         class="mt-1 w-full border rounded px-2 py-1"
                     />
 
