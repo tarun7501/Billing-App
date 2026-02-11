@@ -10,383 +10,284 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Billing.Api.Migrations
 {
-    [DbContext(typeof(BillingDbContext))]
-    partial class BillingDbContextModelSnapshot : ModelSnapshot
-    {
-        protected override void BuildModel(ModelBuilder modelBuilder)
-        {
+	[DbContext(typeof(BillingDbContext))]
+	partial class BillingDbContextModelSnapshot : ModelSnapshot
+	{
+		protected override void BuildModel(ModelBuilder modelBuilder)
+		{
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+			modelBuilder
+				.HasAnnotation("ProductVersion", "10.0.2")
+				.HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+			NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.Bill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.Bill", b =>
+				{
+					b.Property<int>("Id")
+						.ValueGeneratedOnAdd()
+						.HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("AdvanceAmount")
-                        .HasColumnType("numeric");
+					b.Property<decimal>("AdvanceAmount")
+						.HasColumnType("numeric");
 
-                    b.Property<decimal>("BalanceAmount")
-                        .HasColumnType("numeric");
+					b.Property<decimal>("BalanceAmount")
+						.HasColumnType("numeric");
 
-                    b.Property<DateTime>("BillDate")
-                        .HasColumnType("timestamp with time zone");
+					b.Property<DateTime>("BillDate")
+						.HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("BillNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
+					b.Property<string>("BillNumber")
+						.IsRequired()
+						.HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
+					b.Property<DateTime>("CreatedOn")
+						.HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
+					b.Property<int>("CustomerId")
+						.HasColumnType("integer");
 
-                    b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("numeric");
+					b.Property<decimal>("DiscountAmount")
+						.HasColumnType("numeric");
 
-                    b.Property<bool>("IsCleared")
-                        .HasColumnType("boolean");
+					b.Property<bool>("IsCleared")
+						.HasColumnType("boolean");
 
-                    b.Property<decimal>("SubTotalAmount")
-                        .HasColumnType("numeric");
+					b.Property<decimal>("SubTotalAmount")
+						.HasColumnType("numeric");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("numeric");
+					b.Property<decimal>("TotalAmount")
+						.HasColumnType("numeric");
 
-                    b.HasKey("Id");
+					b.HasKey("Id");
 
-                    b.HasIndex("BillNumber")
-                        .IsUnique();
+					b.HasIndex("BillNumber")
+						.IsUnique();
 
-                    b.HasIndex("CustomerId");
+					b.HasIndex("CustomerId");
 
-                    b.ToTable("Bills");
-                });
+					b.ToTable("Bills");
+				});
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.BillItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.BillItem", b =>
+				{
+					b.Property<int>("Id")
+						.ValueGeneratedOnAdd()
+						.HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BillId")
-                        .HasColumnType("integer");
+					b.Property<int>("BillId")
+						.HasColumnType("integer");
 
-                    b.Property<int?>("LaminationFinishId")
-                        .HasColumnType("integer");
+					b.Property<int?>("LaminationFinishId")
+						.HasColumnType("integer");
 
-                    b.Property<int?>("LaminationTypeId")
-                        .HasColumnType("integer");
+					b.Property<int?>("LaminationTypeId")
+						.HasColumnType("integer");
 
-                    b.Property<int>("PhotoServiceId")
-                        .HasColumnType("integer");
+					b.Property<int>("PhotoServiceId")
+						.HasColumnType("integer");
 
-                    b.Property<int>("PhotoSizeId")
-                        .HasColumnType("integer");
+					b.Property<int>("PhotoSizeId")
+						.HasColumnType("integer");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
+					b.Property<int>("Quantity")
+						.HasColumnType("integer");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("numeric(10,2)");
+					b.Property<decimal>("TotalPrice")
+						.HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("numeric(10,2)");
+					b.Property<decimal>("UnitPrice")
+						.HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
+					b.HasKey("Id");
 
-                    b.HasIndex("BillId");
+					b.HasIndex("BillId");
 
-                    b.HasIndex("LaminationFinishId");
+					b.HasIndex("LaminationFinishId");
 
-                    b.HasIndex("LaminationTypeId");
+					b.HasIndex("LaminationTypeId");
 
-                    b.HasIndex("PhotoServiceId");
+					b.HasIndex("PhotoServiceId");
 
-                    b.HasIndex("PhotoSizeId");
+					b.HasIndex("PhotoSizeId");
 
-                    b.ToTable("BillItems");
-                });
+					b.ToTable("BillItems");
+				});
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.Customer", b =>
+				{
+					b.Property<int>("Id")
+						.ValueGeneratedOnAdd()
+						.HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
+					b.Property<DateTime>("CreatedOn")
+						.HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
+					b.Property<string>("Email")
+						.HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+					b.Property<string>("Name")
+						.IsRequired()
+						.HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
+					b.Property<string>("PhoneNumber")
+						.IsRequired()
+						.HasColumnType("text");
 
-                    b.HasKey("Id");
+					b.HasKey("Id");
 
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
+					b.HasIndex("PhoneNumber")
+						.IsUnique();
 
-                    b.ToTable("Customers");
-                });
+					b.ToTable("Customers");
+				});
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationFinish", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationFinish", b =>
+				{
+					b.Property<int>("Id")
+						.ValueGeneratedOnAdd()
+						.HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+					b.Property<bool>("IsActive")
+						.HasColumnType("boolean");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+					b.Property<string>("Name")
+						.IsRequired()
+						.HasColumnType("text");
 
-                    b.HasKey("Id");
+					b.HasKey("Id");
 
-                    b.ToTable("LaminationFinishes");
-                });
+					b.ToTable("LaminationFinishes");
+				});
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationFinishPrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationType", b =>
+				{
+					b.Property<int>("Id")
+						.ValueGeneratedOnAdd()
+						.HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("ExtraPrice")
-                        .HasColumnType("numeric(10,2)");
+					b.Property<bool>("IsActive")
+						.HasColumnType("boolean");
 
-                    b.Property<int>("LaminationFinishId")
-                        .HasColumnType("integer");
+					b.Property<string>("Name")
+						.IsRequired()
+						.HasColumnType("text");
 
-                    b.Property<int>("PhotoSizeId")
-                        .HasColumnType("integer");
+					b.HasKey("Id");
 
-                    b.HasKey("Id");
+					b.ToTable("LaminationTypes");
+				});
 
-                    b.HasIndex("LaminationFinishId");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoService", b =>
+				{
+					b.Property<int>("Id")
+						.ValueGeneratedOnAdd()
+						.HasColumnType("integer");
 
-                    b.HasIndex("PhotoSizeId");
+					NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.ToTable("LaminationFinishPrices");
-                });
+					b.Property<bool>("IsActive")
+						.HasColumnType("boolean");
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+					b.Property<string>("Name")
+						.IsRequired()
+						.HasColumnType("text");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					b.HasKey("Id");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+					b.ToTable("PhotoServices");
+				});
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoSize", b =>
+				{
+					b.Property<int>("Id")
+						.ValueGeneratedOnAdd()
+						.HasColumnType("integer");
 
-                    b.HasKey("Id");
+					NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.ToTable("LaminationTypes");
-                });
+					b.Property<bool>("IsActive")
+						.HasColumnType("boolean");
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoPricing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+					b.Property<string>("Label")
+						.IsRequired()
+						.HasColumnType("text");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					b.HasKey("Id");
 
-                    b.Property<decimal>("BasePrice")
-                        .HasColumnType("numeric(10,2)");
+					b.ToTable("PhotoSizes");
+				});
 
-                    b.Property<decimal>("ExtraCopyPrice")
-                        .HasColumnType("numeric(10,2)");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.Bill", b =>
+				{
+					b.HasOne("Billing.Api.Domain.Entities.Customer", "Customer")
+						.WithMany("Bills")
+						.HasForeignKey("CustomerId")
+						.OnDelete(DeleteBehavior.Cascade)
+						.IsRequired();
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+					b.Navigation("Customer");
+				});
 
-                    b.Property<int>("MinimumCopies")
-                        .HasColumnType("integer");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.BillItem", b =>
+				{
+					b.HasOne("Billing.Api.Domain.Entities.Bill", "Bill")
+						.WithMany("Items")
+						.HasForeignKey("BillId")
+						.OnDelete(DeleteBehavior.Cascade)
+						.IsRequired();
 
-                    b.Property<int>("PhotoServiceId")
-                        .HasColumnType("integer");
+					b.HasOne("Billing.Api.Domain.Entities.LaminationFinish", "LaminationFinish")
+						.WithMany()
+						.HasForeignKey("LaminationFinishId");
 
-                    b.Property<int>("PhotoSizeId")
-                        .HasColumnType("integer");
+					b.HasOne("Billing.Api.Domain.Entities.LaminationType", "LaminationType")
+						.WithMany()
+						.HasForeignKey("LaminationTypeId");
 
-                    b.HasKey("Id");
+					b.HasOne("Billing.Api.Domain.Entities.PhotoService", "PhotoService")
+						.WithMany()
+						.HasForeignKey("PhotoServiceId")
+						.OnDelete(DeleteBehavior.Cascade)
+						.IsRequired();
 
-                    b.HasIndex("PhotoServiceId");
+					b.HasOne("Billing.Api.Domain.Entities.PhotoSize", "PhotoSize")
+						.WithMany()
+						.HasForeignKey("PhotoSizeId")
+						.OnDelete(DeleteBehavior.Cascade)
+						.IsRequired();
 
-                    b.HasIndex("PhotoSizeId");
+					b.Navigation("Bill");
 
-                    b.ToTable("PhotoPricings");
-                });
+					b.Navigation("LaminationFinish");
 
-            modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoService", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+					b.Navigation("LaminationType");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+					b.Navigation("PhotoService");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+					b.Navigation("PhotoSize");
+				});
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+			modelBuilder.Entity("Billing.Api.Domain.Entities.Bill", b =>
+				{
+					b.Navigation("Items");
+				});
 
-                    b.HasKey("Id");
-
-                    b.ToTable("PhotoServices");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoSize", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Label")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PhotoSizes");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.Bill", b =>
-                {
-                    b.HasOne("Billing.Api.Domain.Entities.Customer", "Customer")
-                        .WithMany("Bills")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.BillItem", b =>
-                {
-                    b.HasOne("Billing.Api.Domain.Entities.Bill", "Bill")
-                        .WithMany("Items")
-                        .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Billing.Api.Domain.Entities.LaminationFinish", "LaminationFinish")
-                        .WithMany()
-                        .HasForeignKey("LaminationFinishId");
-
-                    b.HasOne("Billing.Api.Domain.Entities.LaminationType", "LaminationType")
-                        .WithMany()
-                        .HasForeignKey("LaminationTypeId");
-
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoService", "PhotoService")
-                        .WithMany()
-                        .HasForeignKey("PhotoServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoSize", "PhotoSize")
-                        .WithMany()
-                        .HasForeignKey("PhotoSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bill");
-
-                    b.Navigation("LaminationFinish");
-
-                    b.Navigation("LaminationType");
-
-                    b.Navigation("PhotoService");
-
-                    b.Navigation("PhotoSize");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.LaminationFinishPrice", b =>
-                {
-                    b.HasOne("Billing.Api.Domain.Entities.LaminationFinish", "LaminationFinish")
-                        .WithMany()
-                        .HasForeignKey("LaminationFinishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoSize", "PhotoSize")
-                        .WithMany()
-                        .HasForeignKey("PhotoSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LaminationFinish");
-
-                    b.Navigation("PhotoSize");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.PhotoPricing", b =>
-                {
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoService", "PhotoService")
-                        .WithMany()
-                        .HasForeignKey("PhotoServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Billing.Api.Domain.Entities.PhotoSize", "PhotoSize")
-                        .WithMany()
-                        .HasForeignKey("PhotoSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PhotoService");
-
-                    b.Navigation("PhotoSize");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.Bill", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Billing.Api.Domain.Entities.Customer", b =>
-                {
-                    b.Navigation("Bills");
-                });
+			modelBuilder.Entity("Billing.Api.Domain.Entities.Customer", b =>
+				{
+					b.Navigation("Bills");
+				});
 #pragma warning restore 612, 618
-        }
-    }
+		}
+	}
 }
