@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class BillService {
-    private readonly baseUrl = 'http://localhost:5000/api/bills'; // adjust if needed
+    private readonly baseUrl = 'http://localhost:5000/api/bills';
 
     constructor(private http: HttpClient) {}
 
@@ -13,11 +13,15 @@ export class BillService {
         return this.http.post<number>(this.baseUrl, payload);
     }
 
-    getBill(id: number) {
-        return this.http.get(`${this.baseUrl}/${id}`);
+    getBillById(id: string) {
+        return this.http.get<any>(`${this.baseUrl}/${id}`);
     }
 
-    getAllBills() {
-        return this.http.get(`${this.baseUrl}/all`);
+    markBillAsCleared(id: string) {
+        return this.http.put<any>(`${this.baseUrl}/${id}/clear`, {});
+    }
+
+    getAllBills(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.baseUrl}/all`);
     }
 }
