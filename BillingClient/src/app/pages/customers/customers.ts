@@ -1,5 +1,5 @@
 import { CustomersService } from './../../services/customers.service';
-import { Component, signal, computed, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,60 +19,68 @@ interface Customer {
 
 @Component({
     selector: 'app-customers',
+    standalone: true,
     imports: [CommonModule, FormsModule, MatIconModule, HttpClientModule],
     templateUrl: './customers.html',
     styleUrl: './customers.css',
-    standalone: true,
 })
 export class Customers implements OnInit {
+    searchQuery: string = '';
+    customers: Customer[] = [];
+    filteredCustomers: Customer[] = [];
+    isLoading: boolean = true;
+
+    totalBills: number = 0;
+    totalPending: number = 0;
+
     constructor(
         private router: Router,
-        private CustomersService: CustomersService,
+        private customersService: CustomersService,
+        private cdr: ChangeDetectorRef,
     ) {}
-
-    searchQuery = signal('');
-    customers: Customer[] = [];
-    isLoading = signal(true);
 
     ngOnInit(): void {
         this.loadCustomers();
     }
 
     loadCustomers() {
-        this.isLoading.set(true);
+        this.isLoading = true;
 
-        this.CustomersService.getCustomerSummary().subscribe({
-            next: (data) => {
+        this.customersService.getCustomerSummary().subscribe({
+            next: (data: Customer[]) => {
                 this.customers = data;
-                this.isLoading.set(false);
+                this.filteredCustomers = [...this.customers];
+
+                this.calculateTotals();
+
+                this.isLoading = false;
+                this.cdr.detectChanges();
             },
-            error: (err) => {
+            error: () => {
                 alert('Failed to load customers. Please try again later.');
-                this.isLoading.set(false);
+                this.isLoading = false;
+                this.cdr.detectChanges();
             },
         });
     }
 
-    filteredCustomers = computed(() => {
-        const query = this.searchQuery().toLowerCase();
+    calculateTotals() {
+        this.totalBills = this.customers.reduce((sum, c) => sum + c.totalBills, 0);
+        this.totalPending = this.customers.reduce((sum, c) => sum + c.pendingBalance, 0);
+    }
 
-        return this.customers.filter(
+    onSearchChange() {
+        const query = this.searchQuery.toLowerCase();
+
+        this.filteredCustomers = this.customers.filter(
             (customer) =>
                 customer.name.toLowerCase().includes(query) ||
                 customer.phone.includes(query) ||
                 customer.email?.toLowerCase().includes(query),
         );
-    });
-
-    totalBills = computed(() => this.customers.reduce((sum, c) => sum + c.totalBills, 0));
-    totalPending = computed(() => this.customers.reduce((sum, c) => sum + c.pendingBalance, 0));
+    }
 
     onViewCustomer(id: string) {
         this.router.navigate(['/customers', id]);
-    }
-
-    onSearchChange(event: Event) {
-        const value = (event.target as HTMLInputElement).value;
-        this.searchQuery.set(value);
     }
 }

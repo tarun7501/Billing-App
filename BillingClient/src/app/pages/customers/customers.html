@@ -1,9 +1,9 @@
 <div class="p-8">
-    <div *ngIf="isLoading()" class="text-center py-12">
+    <div *ngIf="isLoading" class="text-center py-12">
         <p class="text-slate-500">Loading customers...</p>
     </div>
 
-    <div *ngIf="!isLoading()">
+    <div *ngIf="!isLoading">
         <div class="flex items-center justify-between mb-8">
             <div>
                 <h1 class="text-3xl font-semibold text-slate-800">Customers</h1>
@@ -26,7 +26,7 @@
                     <p class="text-sm font-medium text-slate-600">Total Bills</p>
                 </div>
                 <div class="px-6 pb-6">
-                    <div class="text-3xl font-semibold text-slate-800">{{ totalBills() }}</div>
+                    <div class="text-3xl font-semibold text-slate-800">{{ totalBills }}</div>
                     <p class="text-xs text-slate-500 mt-1">All customer bills</p>
                 </div>
             </div>
@@ -35,9 +35,7 @@
                     <p class="text-sm font-medium text-slate-600">Total Pending</p>
                 </div>
                 <div class="px-6 pb-6">
-                    <div class="text-3xl font-semibold text-slate-800">
-                        ₹{{ totalPending().toLocaleString('en-IN') }}
-                    </div>
+                    <div class="text-3xl font-semibold text-slate-800">₹{{ totalPending.toLocaleString('en-IN') }}</div>
                     <p class="text-xs text-slate-500 mt-1">Outstanding balance</p>
                 </div>
             </div>
@@ -49,8 +47,8 @@
                     type="text"
                     class="pl-10 h-12 w-full rounded-md border border-slate-200"
                     placeholder="Search by Name or Phone Number..."
-                    [value]="searchQuery()"
-                    (input)="searchQuery.set($any($event.target).value)"
+                    [(ngModel)]="searchQuery"
+                    (input)="onSearchChange()"
                 />
             </div>
         </div>
@@ -70,7 +68,7 @@
                 </thead>
                 <tbody>
                     <tr
-                        *ngFor="let customer of filteredCustomers(); let i = index"
+                        *ngFor="let customer of filteredCustomers; let i = index"
                         [class.bg-white]="i % 2 === 0"
                         [class.bg-slate-50/50]="i % 2 !== 0"
                     >
@@ -91,7 +89,7 @@
                             </span>
                             <span *ngIf="customer.pendingBalance === 0" class="text-green-600"> ₹0 </span>
                         </td>
-                        <td class="px-4 py-3 text-slate-600">{{ customer.lastBillDate | date:'dd MMM yyyy' }}</td>
+                        <td class="px-4 py-3 text-slate-600">{{ customer.lastBillDate | date: 'dd MMM yyyy' }}</td>
                         <td class="px-4 py-3 text-right">
                             <button
                                 class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-1 rounded"
@@ -106,7 +104,7 @@
             </table>
         </div>
         <div
-            *ngIf="filteredCustomers().length === 0"
+            *ngIf="filteredCustomers.length === 0"
             class="text-center py-12 bg-white rounded-lg border border-slate-200 mt-6"
         >
             <p class="text-slate-500">No customers found matching your search.</p>
