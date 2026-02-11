@@ -76,17 +76,11 @@ export class CreateBill {
             items: this.billItems,
         };
 
-        console.log('Create Bill Payload', payload);
-
         this.billService.createBill(payload).subscribe({
             next: (billId: number) => {
-                console.log('Bill created with ID:', billId);
-
-                // 🔥 Navigate to view bill
-                this.router.navigate(['/bills', billId]);
+                this.router.navigate(['/bills']);
             },
             error: (err) => {
-                console.error('Create bill failed', err);
                 alert('Failed to create bill. Please try again.');
             },
         });

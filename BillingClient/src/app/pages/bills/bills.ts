@@ -56,7 +56,7 @@ export class Bills implements OnInit {
                 this.cdr.detectChanges();
             },
             error: (err) => {
-                console.error(err);
+                alert('Failed to load bills. Please try again later.');
                 this.isLoading = false;
                 this.cdr.detectChanges();
             },

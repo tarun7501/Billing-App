@@ -233,7 +233,7 @@ We look forward to serving you again! 🙏`;
                 }
             },
             error: (err) => {
-                console.error('Error clearing bill', err);
+                alert('Failed to mark bill as cleared. Please try again.');
                 this.isClearing = false;
             },
             complete: () => {
