@@ -1,6 +1,9 @@
-<div class="p-8" *ngIf="bill; else notFound">
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
+<div *ngIf="isLoading" class="flex items-center justify-center h-[60vh]">
+    <p class="text-slate-500 text-lg">Loading bill...</p>
+</div>
+
+<div class="p-8" *ngIf="!isLoading && bill; else notFound">
+    <div class="flex items-center justify-between mb-8 no-print">
         <div class="flex items-center gap-4">
             <button (click)="goBack()" class="p-2 rounded hover:bg-slate-100">←</button>
             <div>
@@ -10,80 +13,73 @@
         </div>
 
         <div class="flex gap-3">
-            <button class="px-4 py-2 border rounded flex items-center gap-2" (click)="downloadPDF()">
-                ⬇ Download PDF
-            </button>
-
-            <button class="px-4 py-2 border rounded flex items-center gap-2" (click)="shareWhatsApp()">
-                📤 Share via WhatsApp
-            </button>
-
+            <button class="px-4 py-2 border rounded" (click)="downloadPDF()">⬇ Download PDF</button>
+            <button class="px-4 py-2 border rounded" (click)="shareWhatsApp()">📤 Share</button>
             <button
                 *ngIf="bill.status === 'Pending'"
-                class="px-4 py-2 bg-green-600 text-white rounded flex items-center gap-2 hover:bg-green-700"
+                class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                [disabled]="isClearing"
                 (click)="markAsCleared()"
             >
-                ✔ Mark as Cleared
+                {{ isClearing ? 'Processing...' : '✔ Mark as Cleared' }}
             </button>
         </div>
     </div>
 
-    <div class="max-w-5xl space-y-6">
-        <!-- Bill Overview -->
-        <div class="bg-white rounded-lg border p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold">Bill Overview</h2>
-                <span
-                    class="px-4 py-1 rounded text-sm"
+    <div id="bill-pdf" class="pdf-export bg-white border rounded-xl shadow-sm max-w-5xl mx-auto p-10 space-y-10">
+        <div class="flex justify-between items-start border-b border-slate-200 pb-6">
+            <div style="max-width: 65%">
+                <div class="brand-title">Rajan Photo Studio</div>
+
+                <div class="brand-subtitle">Capturing Moments, Creating Memories 📸</div>
+            </div>
+
+            <div class="text-right text-sm space-y-2">
+                <div>
+                    <span class="font-semibold text-slate-600">Bill No:</span>
+                    <span class="ml-1">{{ bill.billNumber }}</span>
+                </div>
+
+                <div>
+                    <span class="font-semibold text-slate-600">Bill Date:</span>
+                    <span class="ml-1">{{ bill.date | date:'dd MMM yyyy' }}</span>
+                </div>
+
+                <div
+                    class="inline-block mt-2 px-4 py-1 rounded-full text-xs font-bold"
                     [ngClass]="{
-            'bg-green-100 text-green-700': bill.status === 'Cleared',
-            'bg-amber-100 text-amber-700': bill.status === 'Pending'
-          }"
+        'status-cleared': bill.status === 'Cleared',
+        'status-pending': bill.status === 'Pending'
+    }"
                 >
                     {{ bill.status }}
-                </span>
-            </div>
-
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <p class="text-sm text-slate-500">Bill Number</p>
-                    <p class="text-lg font-semibold">{{ bill.billNumber }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500">Bill Date</p>
-                    <p class="text-lg font-semibold">{{ bill.date | date:'dd MMMM yyyy' }}</p>
                 </div>
             </div>
         </div>
 
-        <!-- Customer Details -->
-        <div class="bg-white rounded-lg border p-6">
-            <h2 class="text-lg font-semibold mb-4">Customer Details</h2>
+        <div class="grid grid-cols-3 gap-6">
+            <div class="border rounded-lg p-5">
+                <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">Customer Name</div>
+                <div class="text-lg font-semibold">{{ bill.customerName }}</div>
+            </div>
 
-            <div class="grid grid-cols-3 gap-6">
-                <div>
-                    <p class="text-sm text-slate-500">Customer Name</p>
-                    <p class="text-lg font-semibold">{{ bill.customerName }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500">Phone Number</p>
-                    <p class="text-lg font-semibold">{{ bill.phone }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500">Email Address</p>
-                    <p class="text-lg font-semibold">{{ bill.email || '—' }}</p>
-                </div>
+            <div class="border rounded-lg p-5">
+                <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">Phone Number</div>
+                <div class="text-lg font-semibold">{{ bill.phone }}</div>
+            </div>
+
+            <div class="border rounded-lg p-5">
+                <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">Email Address</div>
+                <div class="text-lg font-semibold">{{ bill.email || '—' }}</div>
             </div>
         </div>
 
-        <!-- Bill Items -->
-        <div class="bg-white rounded-lg border p-6 space-y-6">
-            <h2 class="text-lg font-semibold mb-4">Bill Items</h2>
-            <!-- Mobile -->
+        <div class="space-y-8">
+            <div class="text-xl font-bold text-slate-700 border-b pb-2">Bill Items</div>
             <div *ngIf="bill.mobilePhotoItems.length">
-                <h3 class="text-lg font-semibold mb-3">Mobile Photo</h3>
-                <table class="w-full border">
-                    <thead class="bg-slate-50">
+                <div class="text-lg font-semibold mb-3">📱 Mobile Photo Prints</div>
+                <table class="modern-table">
+                    <thead>
                         <tr>
                             <th>Photo Size</th>
                             <th>Copies</th>
@@ -102,15 +98,14 @@
                 </table>
             </div>
 
-            <!-- Studio -->
             <div *ngIf="bill.studioPhotoItems.length">
-                <h3 class="text-lg font-semibold mb-3">Studio Photo</h3>
-                <table class="w-full border">
-                    <thead class="bg-slate-50">
+                <div class="text-lg font-semibold mb-3">🎞️ Studio Photo Prints</div>
+
+                <table class="modern-table">
+                    <thead>
                         <tr>
                             <th>Photo Size</th>
                             <th>Copies</th>
-                            <th>Extra</th>
                             <th>Unit Price</th>
                             <th class="text-right">Total</th>
                         </tr>
@@ -119,7 +114,6 @@
                         <tr *ngFor="let i of bill.studioPhotoItems">
                             <td>{{ i.photoSize }}</td>
                             <td>{{ i.numberOfCopies }}</td>
-                            <td>{{ i.extraCopies || 0 }}</td>
                             <td>₹{{ i.unitPrice }}</td>
                             <td class="text-right font-semibold">₹{{ i.total }}</td>
                         </tr>
@@ -127,11 +121,11 @@
                 </table>
             </div>
 
-            <!-- Lamination -->
             <div *ngIf="bill.laminationItems.length">
-                <h3 class="text-lg font-semibold mb-3">Photo With Lamination</h3>
-                <table class="w-full border">
-                    <thead class="bg-slate-50">
+                <div class="text-lg font-semibold mb-3">🧾 Photo with Lamination</div>
+
+                <table class="modern-table">
+                    <thead>
                         <tr>
                             <th>Size</th>
                             <th>Copies</th>
@@ -155,34 +149,47 @@
             </div>
         </div>
 
-        <!-- Pricing Breakdown -->
-        <div class="border-2 border-blue-100 bg-blue-50/30 rounded-lg p-6">
-            <h2 class="text-lg font-semibold text-blue-900 mb-4">Pricing Breakdown</h2>
+        <div class="bg-indigo-50 rounded-lg p-6 space-y-3">
+            <div class="flex justify-between">
+                <span>Subtotal</span>
+                <span>₹{{ bill.subtotal }}</span>
+            </div>
 
-            <div class="space-y-3">
-                <div class="flex justify-between">
-                    <span>Subtotal</span>
-                    <span>₹{{ bill.subtotal }}</span>
-                </div>
-                <div class="flex justify-between text-red-600">
-                    <span>Discount</span>
-                    <span>- ₹{{ bill.discount }}</span>
-                </div>
-                <div class="flex justify-between text-xl font-bold text-blue-600">
-                    <span>Total</span>
-                    <span>₹{{ bill.totalAmount }}</span>
-                </div>
-                <div class="flex justify-between text-green-600">
-                    <span>Advance</span>
-                    <span>₹{{ bill.advanceAmount }}</span>
-                </div>
-                <div
-                    class="flex justify-between text-xl font-bold"
-                    [ngClass]="bill.balanceAmount > 0 ? 'text-amber-600' : 'text-green-600'"
-                >
-                    <span>Balance</span>
-                    <span>₹{{ bill.balanceAmount }}</span>
-                </div>
+            <div class="flex justify-between text-red-500">
+                <span>Discount</span>
+                <span>- ₹{{ bill.discount }}</span>
+            </div>
+
+            <div class="flex justify-between text-lg font-bold text-indigo-700 border-t pt-2">
+                <span>Total</span>
+                <span>₹{{ bill.totalAmount }}</span>
+            </div>
+
+            <div class="flex justify-between text-green-600 font-semibold">
+                <span>Advance</span>
+                <span>₹{{ bill.advanceAmount }}</span>
+            </div>
+
+            <div
+                class="flex justify-between text-xl font-bold"
+                [ngClass]="bill.balanceAmount > 0 ? 'text-amber-600' : 'text-green-700'"
+            >
+                <span>Balance</span>
+                <span>₹{{ bill.balanceAmount }}</span>
+            </div>
+        </div>
+
+        <div class="border-t pt-6 text-center space-y-3">
+            <div class="text-lg font-semibold text-slate-700">Thank you for choosing Rajan Photo Studio ❤️</div>
+
+            <div class="text-sm text-slate-500">
+                Your memories are precious to us. We truly appreciate your trust and look forward to serving you again!
+            </div>
+
+            <div class="text-sm text-slate-600 mt-4">📞 For any queries, feel free to contact us:</div>
+            <div class="text-base font-medium text-slate-700">
+                <a href="tel:8144438779" class="hover:underline">8144438779</a> |
+                <a href="tel:9937494477" class="hover:underline">9437524859</a>
             </div>
         </div>
     </div>
