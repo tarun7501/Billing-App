@@ -4,29 +4,29 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Billing.Api.Controllers
 {
-    [ApiController]
-    [Route("api/lamination")]
-    public class LaminationController : ControllerBase
-    {
-        private readonly ILaminationRepository _laminationRepository;
+	[ApiController]
+	[Route("api/lamination")]
+	public class LaminationController : ControllerBase
+	{
+		private readonly ILaminationRepository _laminationRepository;
 
-        public LaminationController(ILaminationRepository laminationRepository)
-        {
-            _laminationRepository = laminationRepository;
-        }
+		public LaminationController(ILaminationRepository laminationRepository)
+		{
+			_laminationRepository = laminationRepository;
+		}
 
-        [HttpGet("finishtypes")]
-        public async Task<IActionResult> GetFinshTypes()
-        {
-            var services = await _laminationRepository.GetLaminationFinishTypes();
-            return Ok(services);
-        }
+		[HttpGet("finishtypes")]
+		public async Task<IActionResult> GetFinshTypes()
+		{
+			var services = await _laminationRepository.GetLaminationFinishTypes();
+			return Ok(services);
+		}
 
-        [HttpGet("laminationtypes")]
-        public async Task<IActionResult> GetLaminationTypes()
-        {
-            var sizes = await _laminationRepository.GetLaminationTypes();
-            return Ok(sizes);
-        }
-    }
+		[HttpGet("laminationtypes")]
+		public async Task<IActionResult> GetLaminationTypes()
+		{
+			var sizes = await _laminationRepository.GetLaminationTypes();
+			return Ok(sizes);
+		}
+	}
 }
