@@ -1,41 +1,33 @@
-<div class="p-8">
-    <!-- Header -->
+<div *ngIf="isLoading" class="flex items-center justify-center h-[60vh]">
+    <p class="text-slate-500 text-lg">Loading dashboard...</p>
+</div>
+
+<div *ngIf="!isLoading" class="p-8">
     <div class="mb-8">
         <h1 class="text-3xl font-semibold text-slate-800">Dashboard</h1>
         <p class="text-slate-500 mt-1">Welcome back! Here's your business overview</p>
     </div>
-
-    <!-- KPI Cards -->
     <div class="grid grid-cols-3 gap-6 mb-8">
-        <!-- Monthly Bills -->
         <div class="bg-white border-l-4 border-blue-500 rounded-lg p-6">
             <p class="text-sm text-slate-600">Monthly Bills</p>
             <p class="text-3xl font-semibold text-slate-800 mt-2">{{ monthlyBills }}</p>
             <p class="text-xs text-slate-500 mt-1">Bills created this month</p>
         </div>
-
-        <!-- Total Revenue -->
         <div class="bg-white border-l-4 border-green-500 rounded-lg p-6">
             <p class="text-sm text-slate-600">Total Revenue</p>
             <p class="text-3xl font-semibold text-slate-800 mt-2">₹{{ totalRevenue | number:'1.0-0' }}</p>
             <p class="text-xs text-slate-500 mt-1">All-time earnings</p>
         </div>
-
-        <!-- Pending Amount -->
         <div class="bg-white border-l-4 border-amber-500 rounded-lg p-6">
             <p class="text-sm text-slate-600">Pending Amount</p>
             <p class="text-3xl font-semibold text-slate-800 mt-2">₹{{ pendingAmount | number:'1.0-0' }}</p>
             <p class="text-xs text-slate-500 mt-1">Outstanding payments</p>
         </div>
     </div>
-
-    <!-- Charts -->
     <div class="grid grid-cols-2 gap-6">
-        <!-- Revenue Trend -->
         <div class="bg-white rounded-lg p-6">
             <h2 class="text-lg font-semibold mb-1">Revenue Trend</h2>
             <p class="text-sm text-slate-500 mb-4">Last 7 months performance</p>
-
             <ngx-charts-line-chart
                 [view]="view"
                 [scheme]="lineColorScheme"
@@ -46,12 +38,9 @@
             >
             </ngx-charts-line-chart>
         </div>
-
-        <!-- Bill Status Distribution -->
         <div class="bg-white rounded-lg p-6">
             <h2 class="text-lg font-semibold mb-1">Bill Status Distribution</h2>
             <p class="text-sm text-slate-500 mb-4">Cleared vs Pending bills</p>
-
             <ngx-charts-pie-chart
                 [view]="view"
                 [scheme]="pieColorScheme"

@@ -26,13 +26,9 @@ interface StudioUIItem {
 export class StudioPhotoSection {
     @Output() subtotalChange = new EventEmitter<number>();
     @Output() itemsChange = new EventEmitter<CreateBillItemPayload[]>();
-   
-
     open = true;
+    photoServiceId = 2;
 
-    photoServiceId = 2; // Studio Photo
-
-    // 🔥 FULL & CORRECT PRICING MAP
     pricingRules: StudioPricing[] = [
         { size: '4x6', minCopies: 3, basePrice: 150, extraCopyPrice: 20 },
         { size: '5x7', minCopies: 3, basePrice: 180, extraCopyPrice: 30 },
@@ -40,7 +36,7 @@ export class StudioPhotoSection {
         { size: '8x12', minCopies: 1, basePrice: 150, extraCopyPrice: 130 },
         { size: '10x15', minCopies: 1, basePrice: 300, extraCopyPrice: 250 },
         { size: '12x18', minCopies: 1, basePrice: 400, extraCopyPrice: 350 },
-        { size: '10x24', minCopies: 1, basePrice: 800, extraCopyPrice: 700 },
+        { size: '16x24', minCopies: 1, basePrice: 800, extraCopyPrice: 700 },
         { size: '20x24', minCopies: 1, basePrice: 900, extraCopyPrice: 900 },
         { size: '20x30', minCopies: 1, basePrice: 1200, extraCopyPrice: 1200 },
         { size: '20x40', minCopies: 1, basePrice: 1400, extraCopyPrice: 1400 },
@@ -58,36 +54,32 @@ export class StudioPhotoSection {
     }
 
     getPricing(size: string): StudioPricing {
-        return this.pricingRules.find(p => p.size === size)!;
+        return this.pricingRules.find((p) => p.size === size)!;
     }
 
     calculateTotal(item: StudioUIItem) {
         const pricing = this.getPricing(item.size);
-
-        // enforce minimum copies
         if (item.copies < pricing.minCopies) {
             item.copies = pricing.minCopies;
         }
 
         const extraCopies = item.copies - pricing.minCopies;
-        item.total = pricing.basePrice + (extraCopies * pricing.extraCopyPrice);
+        item.total = pricing.basePrice + extraCopies * pricing.extraCopyPrice;
 
         this.emitSubtotalAndItems();
     }
 
     addRow() {
-        // Pick default size (first in list)
         const defaultPricing = this.pricingRules[0];
 
         this.items.push({
             size: defaultPricing.size,
-            copies: defaultPricing.minCopies,   // ✅ size-based minimum
-            total: defaultPricing.basePrice,    // ✅ correct base price
+            copies: defaultPricing.minCopies,
+            total: defaultPricing.basePrice,
         });
 
         this.emitSubtotalAndItems();
     }
-
 
     remove(index: number) {
         this.items.splice(index, 1);
@@ -98,7 +90,7 @@ export class StudioPhotoSection {
         this.sum = this.items.reduce((s, i) => s + i.total, 0);
         this.subtotalChange.emit(this.sum);
 
-        const payload: CreateBillItemPayload[] = this.items.map(i => {
+        const payload: CreateBillItemPayload[] = this.items.map((i) => {
             const pricing = this.getPricing(i.size);
             return {
                 photoServiceId: this.photoServiceId,
@@ -111,7 +103,6 @@ export class StudioPhotoSection {
         this.itemsChange.emit(payload);
     }
 
-    // 🔧 TEMP helper (replace with API later)
     private mapSizeToId(size: string): number {
         const map: Record<string, number> = {
             '4x6': 1,
@@ -120,7 +111,7 @@ export class StudioPhotoSection {
             '8x12': 4,
             '10x15': 5,
             '12x18': 6,
-            '10x24': 7,
+            '16x24': 7,
             '20x24': 8,
             '20x30': 9,
             '20x40': 10,
@@ -134,8 +125,6 @@ export class StudioPhotoSection {
 
     onSizeChange(item: StudioUIItem) {
         const pricing = this.getPricing(item.size);
-
-        // 🔥 ALWAYS reset copies to new minCopies
         item.copies = pricing.minCopies;
         item.total = pricing.basePrice;
 
@@ -149,7 +138,7 @@ export class StudioPhotoSection {
         }
 
         const extraCopies = item.copies - pricing.minCopies;
-        item.total = pricing.basePrice + (extraCopies * pricing.extraCopyPrice);
+        item.total = pricing.basePrice + extraCopies * pricing.extraCopyPrice;
 
         this.emitSubtotalAndItems();
     }

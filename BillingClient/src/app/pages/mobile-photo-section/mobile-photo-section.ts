@@ -24,13 +24,10 @@ export class MobilePhotoSection implements OnInit {
 
     open = true;
     subtotal = 0;
-
-    photoServiceId = 1; // Mobile Photo
-
+    photoServiceId = 1;
     sizes: PhotoSize[] = [];
     items: MobileUIItem[] = [];
 
-    // 🔥 SIZE → PRICE MAP
     private priceMap: Record<string, number> = {
         '4x6': 20,
         '5x7': 40,
@@ -38,7 +35,7 @@ export class MobilePhotoSection implements OnInit {
         '8x12': 150,
         '10x15': 300,
         '12x18': 400,
-        '10x24': 800,
+        '16x24': 800,
     };
 
     constructor(private photoService: PhotoService) {}
@@ -76,7 +73,6 @@ export class MobilePhotoSection implements OnInit {
 
         item.unitPrice = this.priceMap[size.label] ?? 0;
         item.total = item.qty * item.unitPrice;
-
         this.recalculate();
     }
 

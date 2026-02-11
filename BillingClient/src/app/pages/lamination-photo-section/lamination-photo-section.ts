@@ -24,19 +24,11 @@ export class LaminationPhotoSection {
     @Output() itemsChange = new EventEmitter<CreateBillItemPayload[]>();
 
     open = true;
-    photoServiceId = 3; // Photo With Lamination
-
-    // Sizes
-    sizes = [
-        '6x9', '8x12', '10x15', '12x18',
-        '16x24', '20x24', '20x30', '20x40',
-        '24x24', '24x30', '24x36', '24x40',
-    ];
+    photoServiceId = 3;
+    sizes = ['6x9', '8x12', '10x15', '12x18', '16x24', '20x24', '20x30', '20x40', '24x24', '24x30', '24x36', '24x40'];
 
     types: Array<'Frame' | 'Bit'> = ['Frame', 'Bit'];
     finishes = ['Matte', 'Glossy', 'Glitter', '3D', 'Canvas'];
-
-    // 🔹 Base price by size & type
     private basePrice: Record<string, { Bit?: number; Frame: number }> = {
         '6x9': { Bit: 250, Frame: 350 },
         '8x12': { Bit: 400, Frame: 500 },
@@ -52,7 +44,6 @@ export class LaminationPhotoSection {
         '24x40': { Frame: 6000 },
     };
 
-    // 🔹 Finish surcharge by size (non-Matte only)
     private finishExtraBySize: Record<string, number> = {
         '6x9': 100,
         '8x12': 100,
@@ -79,7 +70,7 @@ export class LaminationPhotoSection {
         const item: LaminationUIItem = {
             size: '6x9',
             type: 'Frame',
-            finish: 'Matte', // 🔥 default
+            finish: 'Matte',
             qty: 1,
             unitPrice: 0,
             total: 0,
@@ -96,25 +87,14 @@ export class LaminationPhotoSection {
     }
 
     calculate(item: LaminationUIItem) {
-        // 🔥 Bit allowed only for smaller sizes
         if (item.type === 'Bit' && !this.basePrice[item.size].Bit) {
             item.type = 'Frame';
         }
 
-        const base =
-            item.type === 'Bit'
-                ? this.basePrice[item.size].Bit!
-                : this.basePrice[item.size].Frame;
-
-        // 🔥 Finish logic
-        const finishExtra =
-            item.finish === 'Matte'
-                ? 0
-                : this.finishExtraBySize[item.size] ?? 0;
-
+        const base = item.type === 'Bit' ? this.basePrice[item.size].Bit! : this.basePrice[item.size].Frame;
+        const finishExtra = item.finish === 'Matte' ? 0 : (this.finishExtraBySize[item.size] ?? 0);
         item.unitPrice = base + finishExtra;
         item.total = item.unitPrice * item.qty;
-
         this.emitAll();
     }
 
@@ -122,7 +102,7 @@ export class LaminationPhotoSection {
         this.sum = this.items.reduce((s, i) => s + i.total, 0);
         this.subtotalChange.emit(this.sum);
 
-        const payload: CreateBillItemPayload[] = this.items.map(i => ({
+        const payload: CreateBillItemPayload[] = this.items.map((i) => ({
             photoServiceId: this.photoServiceId,
             photoSizeId: this.mapSizeToId(i.size),
             laminationTypeId: i.type === 'Bit' ? 1 : 2,
@@ -134,7 +114,6 @@ export class LaminationPhotoSection {
         this.itemsChange.emit(payload);
     }
 
-    // 🔧 Temporary ID mapping (API later)
     private mapSizeToId(size: string): number {
         const map: Record<string, number> = {
             '6x9': 3,
