@@ -11,7 +11,7 @@
         <div *ngFor="let item of items; let i = index" class="bg-white rounded-lg p-3 border border-blue-200">
             <div class="grid grid-cols-12 gap-3 items-start">
                 <div class="col-span-3">
-                    <label class="text-xs font-medium text-slate-600"> Photo Size </label>
+                    <label class="text-xs font-medium text-slate-600">Photo Size</label>
                     <select
                         [(ngModel)]="item.sizeId"
                         (change)="onSizeChange(item)"
@@ -20,8 +20,8 @@
                         <option *ngFor="let s of sizes" [value]="s.id">{{ s.label }}</option>
                     </select>
                 </div>
-                <div class="col-span-3">
-                    <label class="text-xs font-medium text-slate-600"> Number of Copies </label>
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">Number of Copies</label>
                     <input
                         type="number"
                         min="1"
@@ -31,15 +31,23 @@
                     />
                 </div>
                 <div class="col-span-3">
-                    <label class="text-xs font-medium text-slate-600"> Price per Copy </label>
-                    <input [value]="item.unitPrice" disabled class="mt-1 w-full border rounded px-2 py-1 bg-slate-50" />
-                </div>
-                <div class="col-span-2">
-                    <label class="text-xs font-medium text-slate-600"> Row Total </label>
+                    <label class="text-xs font-medium text-slate-600">Price per Copy</label>
                     <input
-                        [value]="'₹' + item.total"
-                        disabled
-                        class="mt-1 w-full border rounded px-2 py-1 bg-slate-50 font-semibold"
+                        type="number"
+                        min="0"
+                        [(ngModel)]="item.unitPrice"
+                        (input)="onUnitPriceChange(item)"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    />
+                </div>
+                <div class="col-span-3">
+                    <label class="text-xs font-medium text-slate-600">Row Total</label>
+                    <input
+                        type="number"
+                        min="0"
+                        [(ngModel)]="item.total"
+                        (input)="onTotalChange(item)"
+                        class="mt-1 w-full border rounded px-2 py-1 font-semibold"
                     />
                 </div>
                 <div class="col-span-1 flex justify-center pt-6">

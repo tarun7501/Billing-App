@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,12 +15,12 @@ import { BillService } from '../../services/bill.service';
     templateUrl: './create-bill.html',
     styleUrl: './create-bill.css',
 })
-export class CreateBill {
+export class CreateBill implements OnInit {
     customerName = '';
     phone = '';
     email = '';
 
-    billNumber = 'BILL-003';
+    billNumber = '';
     billDate = new Date().toISOString().split('T')[0];
     status: 'Pending' | 'Cleared' = 'Pending';
 
@@ -35,7 +35,17 @@ export class CreateBill {
     constructor(
         private router: Router,
         private billService: BillService,
+        private cdr: ChangeDetectorRef,
     ) {}
+
+    ngOnInit(): void {
+        this.billService.generateBillNumber().subscribe({
+            next: (billNumber: string) => {
+                this.billNumber = billNumber;
+                this.cdr.detectChanges();
+            },
+        });
+    }
 
     get subtotal() {
         return this.mobileSubtotal + this.studioSubtotal + this.laminationSubtotal;
@@ -70,6 +80,7 @@ export class CreateBill {
                 phoneNumber: this.phone,
                 email: this.email || null,
             },
+            billNumber: this.billNumber || null,
             billDate: this.billDate,
             discountAmount: this.discount || 0,
             advanceAmount: this.advanceAmount || 0,

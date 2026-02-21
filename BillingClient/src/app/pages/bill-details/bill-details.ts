@@ -173,7 +173,7 @@ export class BillDetails implements OnInit {
         const blob = await this.generatePdfBlob();
         if (!blob) return;
 
-        const fileName = `${this.bill.billNumber}.pdf`;
+        const fileName = `${this.bill.customerName}_Bill.pdf`;
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = fileName;
@@ -188,7 +188,7 @@ export class BillDetails implements OnInit {
         const blob = await this.generatePdfBlob();
         if (!blob) return;
 
-        const fileName = `${this.bill.billNumber}.pdf`;
+        const fileName = `${this.bill.customerName}_Bill.pdf`;
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = fileName;

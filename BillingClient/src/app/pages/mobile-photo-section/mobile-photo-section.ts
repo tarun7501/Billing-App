@@ -77,7 +77,24 @@ export class MobilePhotoSection implements OnInit {
     }
 
     onQtyChange(item: MobileUIItem) {
+        item.qty = Number(item.qty) || 0;
         item.total = item.qty * item.unitPrice;
+        this.recalculate();
+    }
+
+    onUnitPriceChange(item: MobileUIItem) {
+        item.unitPrice = Number(item.unitPrice) || 0;
+        item.total = item.qty * item.unitPrice;
+        this.recalculate();
+    }
+
+    onTotalChange(item: MobileUIItem) {
+        item.total = Number(item.total) || 0;
+
+        if (item.qty > 0) {
+            item.unitPrice = item.total / item.qty;
+        }
+
         this.recalculate();
     }
 
