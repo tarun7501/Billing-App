@@ -24,4 +24,8 @@ export class BillService {
     getAllBills(): Observable<any[]> {
         return this.http.get<any[]>(`${this.baseUrl}/all`);
     }
+
+    generateBillNumber() {
+        return this.http.get(`${this.baseUrl}/generate-bill-number`, { responseType: 'text' });
+    }
 }
