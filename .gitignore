@@ -13,7 +13,6 @@ wwwroot/
 *.userosscache
 *.sln.docstates
 *.exe
-*.iss
 
 ############################
 # Visual Studio / VS Code
