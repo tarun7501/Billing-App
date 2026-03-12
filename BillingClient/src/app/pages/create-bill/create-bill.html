@@ -11,19 +11,46 @@
         <div class="grid grid-cols-3 gap-4">
             <div>
                 <label class="text-sm font-medium text-slate-600"> Customer Name * </label>
+
                 <input
+                    name="customerName"
                     [(ngModel)]="customerName"
+                    #customerNameRef="ngModel"
+                    required
                     placeholder="Enter customer name"
                     class="mt-1.5 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
+
+                <!-- Error -->
+                <p *ngIf="customerNameRef.invalid && customerNameRef.touched" class="text-red-500 text-sm mt-1">
+                    Customer Name is required
+                </p>
             </div>
+
+            <!-- Phone Number -->
             <div>
                 <label class="text-sm font-medium text-slate-600"> Phone Number * </label>
+
                 <input
+                    name="phone"
                     [(ngModel)]="phone"
-                    placeholder="+91 XXXXX XXXXX"
+                    #phoneRef="ngModel"
+                    required
+                    pattern="^[0-9]{10}$"
+                    maxlength="10"
+                    placeholder="Enter 10 digit phone number"
                     class="mt-1.5 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
+
+                <!-- Required Error -->
+                <p *ngIf="phoneRef.errors?.['required'] && phoneRef.touched" class="text-red-500 text-sm mt-1">
+                    Phone Number is required
+                </p>
+
+                <!-- Pattern Error -->
+                <p *ngIf="phoneRef.errors?.['pattern'] && phoneRef.touched" class="text-red-500 text-sm mt-1">
+                    Phone Number must be 10 digits
+                </p>
             </div>
             <div>
                 <label class="text-sm font-medium text-slate-600"> Email Address </label>

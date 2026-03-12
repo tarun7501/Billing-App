@@ -115,6 +115,7 @@ export class MobilePhotoSection implements OnInit {
             photoSizeId: i.sizeId,
             quantity: i.qty,
             unitPrice: i.unitPrice,
+            total: i.total
         }));
 
         this.itemsChange.emit(payload);

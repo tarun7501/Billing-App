@@ -11,6 +11,7 @@ interface StudioPricing {
 }
 
 interface StudioUIItem {
+    snapNumber: number | null;
     size: string;
     copies: number;
     total: number;
@@ -73,6 +74,7 @@ export class StudioPhotoSection {
         const defaultPricing = this.pricingRules[0];
 
         this.items.push({
+            snapNumber: null,
             size: defaultPricing.size,
             copies: defaultPricing.minCopies,
             total: defaultPricing.basePrice,
@@ -95,8 +97,10 @@ export class StudioPhotoSection {
             return {
                 photoServiceId: this.photoServiceId,
                 photoSizeId: this.mapSizeToId(i.size),
+                snapNumber: i.snapNumber ?? undefined,
                 quantity: i.copies,
                 unitPrice: pricing.extraCopyPrice,
+                total: i.total
             };
         });
 
@@ -140,6 +144,11 @@ export class StudioPhotoSection {
         const extraCopies = item.copies - pricing.minCopies;
         item.total = pricing.basePrice + extraCopies * pricing.extraCopyPrice;
 
+        this.emitSubtotalAndItems();
+    }
+
+    onSnapNumberChange(item: StudioUIItem) {
+        item.snapNumber = item.snapNumber ?? null;
         this.emitSubtotalAndItems();
     }
 }

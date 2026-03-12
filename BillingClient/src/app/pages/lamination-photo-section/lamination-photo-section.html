@@ -14,6 +14,16 @@
         <div *ngFor="let item of items; let i = index" class="bg-white rounded-lg p-4 border border-emerald-200">
             <div class="grid grid-cols-12 gap-3 items-start mb-3">
                 <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600"> Snap Number </label>
+                    <input
+                        type="number"
+                        [(ngModel)]="item.snapNumber"
+                        (ngModelChange)="onSnapNumberChange(item)"
+                        placeholder="Enter snap no"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    />
+                </div>
+                <div class="col-span-2">
                     <label class="text-xs font-medium text-slate-600">Photo Size</label>
                     <select
                         [(ngModel)]="item.size"
@@ -43,7 +53,7 @@
                         <option *ngFor="let f of finishes" [value]="f">{{ f }}</option>
                     </select>
                 </div>
-                <div class="col-span-2">
+                <div class="col-span-1">
                     <label class="text-xs font-medium text-slate-600">Quantity</label>
                     <input
                         type="number"
@@ -53,7 +63,7 @@
                         class="mt-1 w-full border rounded px-2 py-1"
                     />
                 </div>
-                <div class="col-span-3">
+                <div class="col-span-2">
                     <label class="text-xs font-medium text-slate-600">Row Total</label>
                     <input
                         [value]="'₹' + item.total"

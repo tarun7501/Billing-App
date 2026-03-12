@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CreateBillItemPayload } from '../../models/bill.model';
 
 interface LaminationUIItem {
+    snapNumber?: number | null;
     size: string;
     type: 'Bit' | 'Frame';
     finish: string;
@@ -68,6 +69,7 @@ export class LaminationPhotoSection {
 
     addRow() {
         const item: LaminationUIItem = {
+            snapNumber: null,
             size: '6x9',
             type: 'Frame',
             finish: 'Matte',
@@ -98,6 +100,11 @@ export class LaminationPhotoSection {
         this.emitAll();
     }
 
+    onSnapNumberChange(item: LaminationUIItem) {
+        item.snapNumber = item.snapNumber ?? null;
+        this.emitAll();
+    }
+
     private emitAll() {
         this.sum = this.items.reduce((s, i) => s + i.total, 0);
         this.subtotalChange.emit(this.sum);
@@ -107,7 +114,9 @@ export class LaminationPhotoSection {
             photoSizeId: this.mapSizeToId(i.size),
             laminationTypeId: i.type === 'Bit' ? 1 : 2,
             laminationFinishId: this.mapFinishToId(i.finish),
+            snapNumber: i.snapNumber ?? undefined,
             quantity: i.qty,
+            total: i.total,
             unitPrice: i.unitPrice,
         }));
 

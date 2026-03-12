@@ -104,6 +104,7 @@
                 <table class="modern-table">
                     <thead>
                         <tr>
+                            <th>Snap Number</th>
                             <th>Photo Size</th>
                             <th>Copies</th>
                             <th>Unit Price</th>
@@ -112,6 +113,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let i of bill.studioPhotoItems">
+                            <td>{{ i.snapNumber || 'NA' }}</td>
                             <td>{{ i.photoSize }}</td>
                             <td>{{ i.numberOfCopies }}</td>
                             <td>₹{{ i.unitPrice }}</td>
@@ -127,6 +129,7 @@
                 <table class="modern-table">
                     <thead>
                         <tr>
+                            <th>Snap Number</th>
                             <th>Size</th>
                             <th>Copies</th>
                             <th>Type</th>
@@ -137,6 +140,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let i of bill.laminationItems">
+                            <td>{{ i.snapNumber || 'NA' }}</td>
                             <td>{{ i.photoSize }}</td>
                             <td>{{ i.numberOfCopies }}</td>
                             <td>{{ i.laminationType }}</td>

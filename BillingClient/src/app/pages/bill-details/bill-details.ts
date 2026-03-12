@@ -15,6 +15,7 @@ interface BillItem {
     extraCopies?: number;
     laminationType?: string;
     laminationFinish?: string;
+    snapNumber?: number | null;
 }
 
 interface Bill {
@@ -120,6 +121,7 @@ export class BillDetails implements OnInit {
             total: item.totalPrice,
             laminationType: item.laminationTypeName,
             laminationFinish: item.laminationFinishName,
+            snapNumber: item.snapNumber ?? null,
         };
     }
 

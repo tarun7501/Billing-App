@@ -3,6 +3,7 @@
 ############################
 bin/
 obj/
+wwwroot/
 
 ############################
 # User-specific files
@@ -11,6 +12,8 @@ obj/
 *.suo
 *.userosscache
 *.sln.docstates
+*.exe
+*.iss
 
 ############################
 # Visual Studio / VS Code

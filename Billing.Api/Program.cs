@@ -2,6 +2,7 @@ using Billing.Api.Contracts;
 using Billing.Api.Infrastructure.Data;
 using Billing.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,19 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
+// Configuration for serving Angular app
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapFallbackToFile("index.html");
+
+// For running the app automatically after installation
+var url = "http://localhost:5000";
+Process.Start(new ProcessStartInfo
+{
+    FileName = url,
+    UseShellExecute = true
+});
 
 app.UseHttpsRedirection();
 

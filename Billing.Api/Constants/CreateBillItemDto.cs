@@ -8,5 +8,7 @@
         public int? LaminationFinishId { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
+        public int? SnapNumber { get; set; }
+        public int Total { get; set; }
     }
 }

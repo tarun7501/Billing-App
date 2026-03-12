@@ -51,9 +51,10 @@ namespace Billing.Api.Controllers
                     PhotoSizeId = item.PhotoSizeId,
                     LaminationTypeId = item.LaminationTypeId,
                     LaminationFinishId = item.LaminationFinishId,
+                    SnapNumber = item.SnapNumber,
                     Quantity = item.Quantity,
                     UnitPrice = item.UnitPrice,
-                    TotalPrice = item.Quantity * item.UnitPrice
+                    TotalPrice = item.Total
                 });
             }
 
@@ -113,7 +114,8 @@ namespace Billing.Api.Controllers
                     LaminationTypeId = i.LaminationTypeId,
                     LaminationTypeName = i.LaminationType?.Name,
                     LaminationFinishId = i.LaminationFinishId,
-                    LaminationFinishName = i.LaminationFinish?.Name,
+                    LaminationFinishName = i.LaminationFinish?.Name,    
+                    SnapNumber = i.SnapNumber,
                     Quantity = i.Quantity,
                     UnitPrice = i.UnitPrice,
                     TotalPrice = i.TotalPrice

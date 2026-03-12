@@ -11,6 +11,7 @@
         public string? LaminationTypeName { get; set; }
         public int? LaminationFinishId { get; set; }
         public string? LaminationFinishName { get; set; }
+        public int? SnapNumber { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }

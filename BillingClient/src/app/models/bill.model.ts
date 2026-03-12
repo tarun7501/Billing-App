@@ -19,4 +19,6 @@ export interface CreateBillItemPayload {
     laminationFinishId?: number;
     quantity: number;
     unitPrice: number;
+    snapNumber?: number;
+    total: number;
 }
