@@ -63,12 +63,12 @@ app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
 // For running the app automatically after installation
-var url = "http://localhost:5000";
-Process.Start(new ProcessStartInfo
-{
-    FileName = url,
-    UseShellExecute = true
-});
+//var url = "http://localhost:5000";
+//Process.Start(new ProcessStartInfo
+//{
+//    FileName = url,
+//    UseShellExecute = true
+//});
 
 app.UseHttpsRedirection();
 
