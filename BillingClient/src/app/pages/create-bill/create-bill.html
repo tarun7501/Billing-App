@@ -67,10 +67,19 @@
         <h2 class="text-lg font-semibold text-slate-800 mb-4">Bill Information</h2>
         <div class="grid grid-cols-3 gap-4">
             <div>
-                <label class="text-sm font-medium text-slate-600"> Bill Number </label>
-                <input [value]="billNumber" disabled class="mt-1.5 w-full border rounded-lg px-3 py-2 bg-slate-50" />
+                <label class="text-sm font-medium text-slate-600"> Bill Number * </label>
+                <input
+                    [(ngModel)]="billNumber"
+                    #billNumberRef="ngModel"
+                    [value]="billNumber"
+                    required
+                    type="text"
+                    class="mt-1.5 w-full border rounded-lg px-3 py-2 bg-slate-50"
+                />
+                <p *ngIf="billNumberRef.invalid && billNumberRef.touched" class="text-red-500 text-sm mt-1">
+                    Bill Number is required
+                </p>
             </div>
-
             <div>
                 <label class="text-sm font-medium text-slate-600"> Bill Date </label>
                 <input type="date" [(ngModel)]="billDate" class="mt-1.5 w-full border rounded-lg px-3 py-2" />
@@ -82,6 +91,17 @@
                     <option value="Pending">Pending</option>
                     <option value="Cleared">Cleared</option>
                 </select>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 gap-4">
+            <div>
+                <label class="text-sm font-medium text-slate-600"> Description </label>
+                <input
+                    [(ngModel)]="description"
+                    placeholder="Additional details about the bill"
+                    type="text"
+                    class="mt-1.5 w-full border rounded-lg px-3 py-2 bg-slate-50"
+                />
             </div>
         </div>
     </div>

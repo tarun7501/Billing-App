@@ -17,5 +17,6 @@ namespace Billing.Api.Domain.Entities
 		public bool IsCleared { get; set; }
 		public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 		public ICollection<BillItem> Items { get; set; } = new List<BillItem>();
-	}
+        public string? Description { get; set; }
+    }
 }

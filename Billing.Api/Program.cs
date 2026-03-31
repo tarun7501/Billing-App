@@ -6,74 +6,73 @@ using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services
 builder.Services.AddControllers();
-
-//Configuring Swagger Service
 builder.Services.AddSwaggerGen();
-
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-//Adding the connection string for database.
+// Database
 builder.Services.AddDbContext<BillingDbContext>(options =>
-	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Adding Services for Repositories
+// Repositories
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 builder.Services.AddScoped<ILaminationRepository, LaminationRepository>();
 
-//Connecting Front End Angular
+// CORS
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowAngular",
-		policy =>
-		{
-			policy
-				.WithOrigins("http://localhost:4200")
-				.AllowAnyHeader()
-				.AllowAnyMethod();
-		});
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
 
 app.UseCors("AllowAngular");
 
+app.UseHttpsRedirection();
+
 // AUTO APPLY MIGRATIONS
 using (var scope = app.Services.CreateScope())
 {
-	var dbContext = scope.ServiceProvider
-		.GetRequiredService<BillingDbContext>();
-
-	dbContext.Database.Migrate();
+    var dbContext = scope.ServiceProvider.GetRequiredService<BillingDbContext>();
+    dbContext.Database.Migrate();
 }
 
-// Configure the HTTP request pipeline.
+// Swagger
 if (app.Environment.IsDevelopment())
 {
-	app.MapOpenApi();
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-// Configuration for serving Angular app
+// Serve Angular static files
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
-// For running the app automatically after installation
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+// Angular routing fallback
+app.MapFallbackToFile("index.html");
+
+// Open browser automatically
 //var url = "http://localhost:5000";
+
 //Process.Start(new ProcessStartInfo
 //{
 //    FileName = url,
 //    UseShellExecute = true
 //});
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();

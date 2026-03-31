@@ -38,12 +38,31 @@ export class MobilePhotoSection implements OnInit {
         '16x24': 800,
     };
 
+    private sizeIdMap: Record<string, number> = {
+        '4x6': 1,
+        '5x7': 2,
+        '6x9': 3,
+        '8x12': 4,
+        '10x15': 5,
+        '12x18': 6,
+        '12x24': 7,
+        '16x24': 8,
+        '20x24': 9,
+        '20x30': 10,
+        '20x40': 11,
+        '24x24': 12,
+        '24x30': 13,
+        '24x36': 14,
+        '24x40': 15,
+    };
+
     constructor(private photoService: PhotoService) {}
 
     ngOnInit() {
-        this.photoService.getPhotoSizes().subscribe((sizes) => {
-            this.sizes = sizes;
-        });
+        this.sizes = Object.keys(this.sizeIdMap).map((label) => ({
+            id: this.sizeIdMap[label],
+            label: label,
+        }));
     }
 
     toggle() {
@@ -115,7 +134,7 @@ export class MobilePhotoSection implements OnInit {
             photoSizeId: i.sizeId,
             quantity: i.qty,
             unitPrice: i.unitPrice,
-            total: i.total
+            total: i.total,
         }));
 
         this.itemsChange.emit(payload);

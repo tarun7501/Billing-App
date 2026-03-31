@@ -37,6 +37,7 @@ export class StudioPhotoSection {
         { size: '8x12', minCopies: 1, basePrice: 150, extraCopyPrice: 130 },
         { size: '10x15', minCopies: 1, basePrice: 300, extraCopyPrice: 250 },
         { size: '12x18', minCopies: 1, basePrice: 400, extraCopyPrice: 350 },
+        { size: '12x24', minCopies: 1, basePrice: 450, extraCopyPrice: 400 },
         { size: '16x24', minCopies: 1, basePrice: 800, extraCopyPrice: 700 },
         { size: '20x24', minCopies: 1, basePrice: 900, extraCopyPrice: 900 },
         { size: '20x30', minCopies: 1, basePrice: 1200, extraCopyPrice: 1200 },
@@ -100,7 +101,7 @@ export class StudioPhotoSection {
                 snapNumber: i.snapNumber ?? undefined,
                 quantity: i.copies,
                 unitPrice: pricing.extraCopyPrice,
-                total: i.total
+                total: i.total,
             };
         });
 
@@ -115,14 +116,15 @@ export class StudioPhotoSection {
             '8x12': 4,
             '10x15': 5,
             '12x18': 6,
-            '16x24': 7,
-            '20x24': 8,
-            '20x30': 9,
-            '20x40': 10,
-            '24x24': 11,
-            '24x30': 12,
-            '24x36': 13,
-            '24x40': 14,
+            '12x24': 7,
+            '16x24': 8,
+            '20x24': 9,
+            '20x30': 10,
+            '20x40': 11,
+            '24x24': 12,
+            '24x30': 13,
+            '24x36': 14,
+            '24x40': 15,
         };
         return map[size];
     }
@@ -134,6 +136,7 @@ export class StudioPhotoSection {
 
         this.emitSubtotalAndItems();
     }
+
     onCopiesChange(item: StudioUIItem) {
         const pricing = this.getPricing(item.size);
 
@@ -149,6 +152,22 @@ export class StudioPhotoSection {
 
     onSnapNumberChange(item: StudioUIItem) {
         item.snapNumber = item.snapNumber ?? null;
+        this.emitSubtotalAndItems();
+    }
+
+    onTotalChange(item: StudioUIItem) {
+        item.total = Number(item.total) || 0;
+
+        const pricing = this.getPricing(item.size);
+
+        if (item.copies > 0) {
+            const extraCopies = item.copies - pricing.minCopies;
+
+            if (extraCopies > 0) {
+                pricing.extraCopyPrice = item.total / item.copies;
+            }
+        }
+
         this.emitSubtotalAndItems();
     }
 }

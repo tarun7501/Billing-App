@@ -8,5 +8,6 @@
         public decimal AdvanceAmount { get; set; }
         public List<CreateBillItemDto> Items { get; set; } = new();
         public string? BillNumber { get; set; }
+        public string? Description { get; set; }
     }
 }

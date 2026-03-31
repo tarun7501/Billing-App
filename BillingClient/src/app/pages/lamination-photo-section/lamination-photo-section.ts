@@ -35,6 +35,7 @@ export class LaminationPhotoSection {
         '8x12': { Bit: 400, Frame: 500 },
         '10x15': { Bit: 600, Frame: 800 },
         '12x18': { Bit: 800, Frame: 1200 },
+        '12x24': { Bit: 1200, Frame: 1200 },
         '16x24': { Frame: 2600 },
         '20x24': { Frame: 3300 },
         '20x30': { Frame: 3600 },
@@ -50,6 +51,7 @@ export class LaminationPhotoSection {
         '8x12': 100,
         '10x15': 150,
         '12x18': 200,
+        '12x24': 250,
         '16x24': 300,
         '20x24': 400,
         '20x30': 400,
@@ -129,14 +131,15 @@ export class LaminationPhotoSection {
             '8x12': 4,
             '10x15': 5,
             '12x18': 6,
-            '16x24': 7,
-            '20x24': 8,
-            '20x30': 9,
-            '20x40': 10,
-            '24x24': 11,
-            '24x30': 12,
-            '24x36': 13,
-            '24x40': 14,
+            '12x24': 7,
+            '16x24': 8,
+            '20x24': 9,
+            '20x30': 10,
+            '20x40': 11,
+            '24x24': 12,
+            '24x30': 13,
+            '24x36': 14,
+            '24x40': 15,
         };
         return map[size];
     }
@@ -150,5 +153,15 @@ export class LaminationPhotoSection {
             Canvas: 5,
         };
         return map[finish];
+    }
+
+    onTotalChange(item: LaminationUIItem) {
+        item.total = Number(item.total) || 0;
+
+        if (item.qty > 0) {
+            item.unitPrice = item.total / item.qty;
+        }
+
+        this.emitAll();
     }
 }

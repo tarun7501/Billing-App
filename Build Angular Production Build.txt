@@ -1,0 +1,7 @@
+Build Angular Production Build - ng build --configuration production
+After creating a folder with Dist. will create with two folders, Server and Browser.
+Copy all the files of the browser inside the Billing API wwwroot folder.
+Build Dotnet Run and Verify able to see the site in the http://localhost:5000/
+Go to the backend Billing API and run this command - dotnet publish -c Release -r win-x64 --self-contained true
+Inside the E:\Users\PC\Billing App\Billing.Api\bin\Release\net10.0\win-x64 have the setup.iss and run the file
+That will create a Output Folder where the installable file will be present for installing the app

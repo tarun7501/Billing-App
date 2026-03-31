@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center p-4 cursor-pointer" (click)="toggle()">
         <div class="flex items-center gap-2">
             <h3 class="font-semibold text-lg text-emerald-800">3. Photo With Lamination</h3>
-            <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded"> Fixed Price per Copy </span>
+            <!-- <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded"> Fixed Price per Copy </span> -->
         </div>
         <span>{{ open ? '▼' : '▶' }}</span>
     </div>
@@ -66,19 +66,21 @@
                 <div class="col-span-2">
                     <label class="text-xs font-medium text-slate-600">Row Total</label>
                     <input
-                        [value]="'₹' + item.total"
-                        disabled
-                        class="mt-1 w-full border rounded px-2 py-1 bg-slate-50 font-semibold"
+                        type="number"
+                        min="0"
+                        [(ngModel)]="item.total"
+                        (input)="onTotalChange(item)"
+                        class="mt-1 w-full border rounded px-2 py-1 font-semibold"
                     />
                 </div>
                 <div class="col-span-1 delete-btn">
                     <button (click)="remove(i)" class="text-red-600 hover:text-red-800">✕</button>
                 </div>
             </div>
-            <div class="bg-emerald-50 rounded p-2 border border-emerald-100 text-xs">
+            <!-- <div class="bg-emerald-50 rounded p-2 border border-emerald-100 text-xs">
                 <span class="font-semibold text-emerald-700"> Price per copy: ₹{{ item.unitPrice }} </span>
                 — {{ item.qty }} × ₹{{ item.unitPrice }} = ₹{{ item.total }}
-            </div>
+            </div> -->
         </div>
         <div *ngIf="items.length === 0" class="text-sm text-slate-500 text-center py-4">
             No items added. Click "Add Row" to add items.

@@ -21,6 +21,7 @@ export class CreateBill implements OnInit {
     email = '';
 
     billNumber = '';
+    description = '';
     billDate = new Date().toISOString().split('T')[0];
     status: 'Pending' | 'Cleared' = 'Pending';
 
@@ -39,12 +40,12 @@ export class CreateBill implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.billService.generateBillNumber().subscribe({
-            next: (billNumber: string) => {
-                this.billNumber = billNumber;
-                this.cdr.detectChanges();
-            },
-        });
+        // this.billService.generateBillNumber().subscribe({
+        //     next: (billNumber: string) => {
+        //         this.billNumber = billNumber;
+        //         this.cdr.detectChanges();
+        //     },
+        // });
     }
 
     get subtotal() {
@@ -74,6 +75,11 @@ export class CreateBill implements OnInit {
             return;
         }
 
+        if (!this.billNumber) {
+            alert('Bill number is required');
+            return;
+        }
+
         const payload = {
             customer: {
                 name: this.customerName,
@@ -85,6 +91,7 @@ export class CreateBill implements OnInit {
             discountAmount: this.discount || 0,
             advanceAmount: this.advanceAmount || 0,
             items: this.billItems,
+            description: this.description || null,
         };
 
         this.billService.createBill(payload).subscribe({
@@ -116,4 +123,12 @@ export class CreateBill implements OnInit {
         this.billItems = this.billItems.filter((x) => x.photoServiceId !== serviceId);
         this.billItems.push(...items);
     }
+
+    // onBillNumberChange(newValue: any) {
+    //     this.billNumber = newValue;
+    // }
+
+    // onDescriptionChange(newValue: any) {
+    //     this.description = newValue;
+    // }
 }

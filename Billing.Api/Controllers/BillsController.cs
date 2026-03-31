@@ -40,7 +40,8 @@ namespace Billing.Api.Controllers
                 BillDate = DateTime.SpecifyKind(dto.BillDate, DateTimeKind.Local).ToUniversalTime(),
                 Customer = customer,
                 DiscountAmount = dto.DiscountAmount,
-                AdvanceAmount = dto.AdvanceAmount
+                AdvanceAmount = dto.AdvanceAmount,
+                Description = dto.Description,
             };
 
             foreach (var item in dto.Items)
@@ -92,6 +93,7 @@ namespace Billing.Api.Controllers
                 Id = bill.Id,
                 BillNumber = bill.BillNumber,
                 BillDate = bill.BillDate,
+                Description = bill.Description,
                 Customer = new CustomerDto
                 {
                     Name = bill.Customer.Name,

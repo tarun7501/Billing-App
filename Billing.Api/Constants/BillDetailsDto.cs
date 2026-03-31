@@ -13,5 +13,6 @@
         public decimal BalanceAmount { get; set; }
         public bool IsCleared { get; set; }
         public List<BillItemDto> Items { get; set; } = new();
+        public string? Description { get; set; }
     }
 }

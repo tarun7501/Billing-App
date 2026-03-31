@@ -34,6 +34,7 @@ interface Bill {
     mobilePhotoItems: BillItem[];
     studioPhotoItems: BillItem[];
     laminationItems: BillItem[];
+    description?: string;
 }
 
 @Component({
@@ -79,6 +80,7 @@ export class BillDetails implements OnInit {
                 this.bill = {
                     id: response.id.toString(),
                     billNumber: response.billNumber,
+                    description: response.description,
                     date: response.billDate,
                     customerName: response.customer.name,
                     phone: response.customer.phoneNumber,
@@ -200,21 +202,37 @@ export class BillDetails implements OnInit {
 
 ✨ Greetings from Rajan Photo Studio! ✨
 
-Your invoice details are below:
+Thank you for choosing us. Your invoice details are below:
 
 🧾 Invoice No: ${this.bill.billNumber}
 📅 Date: ${new Date(this.bill.date).toLocaleDateString()}
 💰 Total Amount: ₹${this.bill.totalAmount}
 💵 Balance Amount: ₹${this.bill.balanceAmount}
 
-We have attached your invoice for your reference.
+📎 Your invoice has been attached for your reference.
 
-Your memories are precious to us, and we truly appreciate the trust you place in our studio. 📸❤️
+📸 *Our Services Include:*
+• Studio Portrait Photoshoot  
+• Baby & Family Photoshoot  
+• Wedding Photography  
+• Customized Photo Frames & LED Frames  
+• Waterproof Photo Lamination  
+• Passport Size Photos  
+• Natraj Albums & Photo Albums  
+• Mobile Photos to Album Conversion  
+• Outdoor Pre-Wedding Photoshoot  
+• Banner / Poster Photo Design  
 
-If you have any questions or need any assistance, feel free to reply to this message.
+🚚 Home delivery available across India  
+📱 Easy ordering from your mobile  
 
-Thank you once again for choosing Rajan Photo Studio.
-We look forward to serving you again! 🙏`;
+Your memories are precious to us ❤️  
+We truly appreciate your trust and look forward to serving you again!
+
+📞 For orders or queries:
+8144438779 | 9437524859 | 9937494477
+
+🙏 Thank you once again for choosing Rajan Photo Studio!`;
 
         const formattedPhone = this.bill.phone.startsWith('91') ? this.bill.phone : `91${this.bill.phone}`;
         const whatsappUrl = `https://web.whatsapp.com/send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`;

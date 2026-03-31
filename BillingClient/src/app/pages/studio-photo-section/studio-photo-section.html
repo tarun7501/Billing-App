@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center p-4 cursor-pointer" (click)="toggle()">
         <div class="flex items-center gap-2">
             <h3 class="font-semibold text-lg text-purple-800">2. Studio Photo</h3>
-            <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded"> Minimum Copies Required </span>
+            <!-- <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded"> Minimum Copies Required </span> -->
         </div>
         <span>{{ open ? '▼' : '▶' }}</span>
     </div>
@@ -52,16 +52,18 @@
                 <div class="col-span-3">
                     <label class="text-xs font-medium text-slate-600"> Row Total </label>
                     <input
-                        [value]="'₹' + item.total"
-                        disabled
-                        class="mt-1 w-full border rounded px-2 py-1 bg-slate-50 font-semibold"
+                        type="number"
+                        min="0"
+                        [(ngModel)]="item.total"
+                        (input)="onTotalChange(item)"
+                        class="mt-1 w-full border rounded px-2 py-1 font-semibold"
                     />
                 </div>
                 <div class="col-span-1 delete-btn">
                     <button (click)="remove(i)" class="text-red-600 hover:text-red-800">✕</button>
                 </div>
             </div>
-            <div class="bg-purple-50 rounded p-2 border border-purple-100 text-xs">
+            <!-- <div class="bg-purple-50 rounded p-2 border border-purple-100 text-xs">
                 <div class="grid grid-cols-3 gap-2">
                     <div>
                         Base Price:
@@ -78,7 +80,7 @@
                         <b> {{ item.copies - getPricing(item.size).minCopies }} </b>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div *ngIf="items.length === 0" class="text-sm text-slate-500 text-center py-4">
             No items added. Click "Add Row" to add items.
