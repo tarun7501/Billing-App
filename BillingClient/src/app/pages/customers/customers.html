@@ -17,32 +17,43 @@
                     <mat-icon class="text-blue-500">person</mat-icon>
                 </div>
                 <div class="px-6 pb-6">
-                    <div class="text-3xl font-semibold text-slate-800">{{ customers.length }}</div>
+                    <div class="text-3xl font-semibold text-slate-800">
+                        {{ totalCustomers }}
+                    </div>
                     <p class="text-xs text-slate-500 mt-1">Active customers</p>
                 </div>
             </div>
+
             <div class="bg-white rounded-lg border border-slate-200 shadow-sm border-l-4 border-l-green-500">
                 <div class="flex flex-row items-center justify-between pb-2 p-6">
                     <p class="text-sm font-medium text-slate-600">Total Bills</p>
                 </div>
                 <div class="px-6 pb-6">
-                    <div class="text-3xl font-semibold text-slate-800">{{ totalBills }}</div>
+                    <div class="text-3xl font-semibold text-slate-800">
+                        {{ totalBills }}
+                    </div>
                     <p class="text-xs text-slate-500 mt-1">All customer bills</p>
                 </div>
             </div>
+
             <div class="bg-white rounded-lg border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
                 <div class="flex flex-row items-center justify-between pb-2 p-6">
                     <p class="text-sm font-medium text-slate-600">Total Pending</p>
                 </div>
                 <div class="px-6 pb-6">
-                    <div class="text-3xl font-semibold text-slate-800">₹{{ totalPending.toLocaleString('en-IN') }}</div>
+                    <div class="text-3xl font-semibold text-slate-800">
+                        ₹{{ totalPending.toLocaleString('en-IN') }}
+                    </div>
                     <p class="text-xs text-slate-500 mt-1">Outstanding balance</p>
                 </div>
             </div>
         </div>
         <div class="mb-6">
             <div class="relative max-w-md">
-                <mat-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"> search </mat-icon>
+                <mat-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                    search
+                </mat-icon>
+
                 <input
                     type="text"
                     class="pl-10 h-12 w-full rounded-md border border-slate-200"
@@ -56,40 +67,75 @@
             <table class="w-full">
                 <thead>
                     <tr class="bg-slate-50">
-                        <th class="px-4 py-3 text-left font-semibold text-slate-700">Customer Name</th>
-                        <th class="px-4 py-3 text-left font-semibold text-slate-700">Phone Number</th>
-                        <th class="px-4 py-3 text-left font-semibold text-slate-700">Email</th>
-                        <th class="px-4 py-3 text-left font-semibold text-slate-700">Total Bills</th>
-                        <th class="px-4 py-3 text-left font-semibold text-slate-700">Total Spent</th>
-                        <th class="px-4 py-3 text-left font-semibold text-slate-700">Pending Balance</th>
-                        <th class="px-4 py-3 text-left font-semibold text-slate-700">Last Bill Date</th>
-                        <th class="px-4 py-3 text-right font-semibold text-slate-700">Action</th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Customer Name
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Phone Number
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Email
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Total Bills
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Total Spent
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Pending Balance
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Last Bill Date
+                        </th>
+                        <th class="px-4 py-3 text-right font-semibold text-slate-700">
+                            Action
+                        </th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr
                         *ngFor="let customer of filteredCustomers; let i = index"
                         [class.bg-white]="i % 2 === 0"
                         [class.bg-slate-50/50]="i % 2 !== 0"
                     >
-                        <td class="px-4 py-3 font-medium text-slate-800">{{ customer.name }}</td>
-                        <td class="px-4 py-3 text-slate-600">{{ customer.phone }}</td>
-                        <td class="px-4 py-3 text-slate-600">{{ customer.email || '—' }}</td>
+                        <td class="px-4 py-3 font-medium text-slate-800">
+                            {{ customer.name }}
+                        </td>
+
+                        <td class="px-4 py-3 text-slate-600">
+                            {{ customer.phone }}
+                        </td>
+
+                        <td class="px-4 py-3 text-slate-600">
+                            {{ customer.email || '—' }}
+                        </td>
+
                         <td class="px-4 py-3">
                             <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-sm">
                                 {{ customer.totalBills }}
                             </span>
                         </td>
+
                         <td class="px-4 py-3 font-medium text-slate-800">
                             ₹{{ customer.totalSpent.toLocaleString('en-IN') }}
                         </td>
+
                         <td class="px-4 py-3 font-medium">
                             <span *ngIf="customer.pendingBalance > 0" class="text-amber-600">
                                 ₹{{ customer.pendingBalance.toLocaleString('en-IN') }}
                             </span>
-                            <span *ngIf="customer.pendingBalance === 0" class="text-green-600"> ₹0 </span>
+
+                            <span *ngIf="customer.pendingBalance === 0" class="text-green-600">
+                                ₹0
+                            </span>
                         </td>
-                        <td class="px-4 py-3 text-slate-600">{{ customer.lastBillDate | date: 'dd MMM yyyy' }}</td>
+
+                        <td class="px-4 py-3 text-slate-600">
+                            {{ customer.lastBillDate | date: 'dd MMM yyyy' }}
+                        </td>
+
                         <td class="px-4 py-3 text-right">
                             <button
                                 class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-3 py-1 rounded"
@@ -107,7 +153,30 @@
             *ngIf="filteredCustomers.length === 0"
             class="text-center py-12 bg-white rounded-lg border border-slate-200 mt-6"
         >
-            <p class="text-slate-500">No customers found matching your search.</p>
+            <p class="text-slate-500">
+                No customers found matching your search.
+            </p>
+        </div>
+        <div class="flex justify-between items-center mt-6 bg-white p-4 border rounded-lg">
+            <button
+                (click)="previousPage()"
+                [disabled]="currentPage === 1"
+                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded disabled:opacity-50"
+            >
+                Previous
+            </button>
+
+            <div class="text-slate-600">
+                Page {{ currentPage }} of {{ totalPages }}
+            </div>
+
+            <button
+                (click)="nextPage()"
+                [disabled]="currentPage * pageSize >= totalRecords"
+                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded disabled:opacity-50"
+            >
+                Next
+            </button>
         </div>
     </div>
 </div>

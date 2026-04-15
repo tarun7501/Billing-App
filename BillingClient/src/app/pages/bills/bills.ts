@@ -27,6 +27,11 @@ export class Bills implements OnInit {
     bills: Bill[] = [];
     filteredBills: Bill[] = [];
     isLoading: boolean = true;
+    currentPage = 1;
+    pageSize = 10;
+    totalRecords = 0;
+    totalPages = 0;
+    searchTimeout: any;
 
     constructor(
         private router: Router,
@@ -35,11 +40,26 @@ export class Bills implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.loadBills();
+    }
+
+    loadBills() {
         this.isLoading = true;
-        this.billService.getAllBills().subscribe({
-            next: (data: any[]) => {
-                this.bills = data.map(
-                    (item): Bill => ({
+
+        this.billService.getBills(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+            next: (res) => {
+                this.totalRecords = res.totalCount;
+                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+
+                this.bills = res.data.map(
+                    (item: {
+                        id: any;
+                        billNumber: any;
+                        billDate: any;
+                        customer: { name: any; phoneNumber: any };
+                        totalAmount: any;
+                        balanceAmount: number;
+                    }): Bill => ({
                         id: item.id,
                         billNumber: item.billNumber,
                         date: item.billDate,
@@ -55,7 +75,7 @@ export class Bills implements OnInit {
                 this.isLoading = false;
                 this.cdr.detectChanges();
             },
-            error: (err) => {
+            error: () => {
                 alert('Failed to load bills. Please try again later.');
                 this.isLoading = false;
                 this.cdr.detectChanges();
@@ -63,7 +83,21 @@ export class Bills implements OnInit {
         });
     }
 
-    onSearchChange() {
+    nextPage() {
+        if (this.currentPage * this.pageSize < this.totalRecords) {
+            this.currentPage++;
+            this.loadBills();
+        }
+    }
+
+    previousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.loadBills();
+        }
+    }
+
+    onSearchChange1() {
         const query = this.searchQuery.toLowerCase();
         this.filteredBills = this.bills.filter(
             (bill) =>
@@ -71,6 +105,15 @@ export class Bills implements OnInit {
                 bill.customerName.toLowerCase().includes(query) ||
                 bill.phone.includes(query),
         );
+    }
+
+    onSearchChange() {
+        clearTimeout(this.searchTimeout);
+
+        this.searchTimeout = setTimeout(() => {
+            this.currentPage = 1;
+            this.loadBills();
+        }, 400);
     }
 
     createBill() {

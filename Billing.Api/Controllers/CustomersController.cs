@@ -17,26 +17,49 @@ namespace Billing.Api.Controllers
 		}
 
 		[HttpGet("summary")]
-		public async Task<IActionResult> GetCustomerSummaries()
+		public async Task<IActionResult> GetCustomerSummaries(int pageNumber = 1, int pageSize = 10, string search = "")
 		{
-			var customers = await _context.Customers
-					.Select(c => new CustomerSummaryDto
-					{
-						Id = c.Id,
-						Name = c.Name,
-						Phone = c.PhoneNumber,
-						Email = c.Email,
-						TotalBills = c.Bills.Count(),
-						TotalSpent = c.Bills.Sum(b => (decimal?)b.TotalAmount) ?? 0,
-						PendingBalance = c.Bills.Sum(b => (decimal?)b.BalanceAmount) ?? 0,
-						LastBillDate = c.Bills
-							.OrderByDescending(b => b.BillDate)
-							.Select(b => (DateTime?)b.BillDate)
-							.FirstOrDefault()
-					}).ToListAsync();
+            var query = _context.Customers.Include(c => c.Bills).AsQueryable();
 
-			return Ok(customers);
-		}
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+
+                query = query.Where(c =>
+                    c.Name.ToLower().Contains(search) ||
+                    c.PhoneNumber.Contains(search) ||
+                    (c.Email != null && c.Email.ToLower().Contains(search))
+                );
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var customers = await query
+                .OrderByDescending(c => c.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(c => new CustomerSummaryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Phone = c.PhoneNumber,
+                    Email = c.Email,
+                    TotalBills = c.Bills.Count(),
+                    TotalSpent = c.Bills.Sum(b => (decimal?)b.TotalAmount) ?? 0,
+                    PendingBalance = c.Bills.Sum(b => (decimal?)b.BalanceAmount) ?? 0,
+                    LastBillDate = c.Bills
+                        .OrderByDescending(b => b.BillDate)
+                        .Select(b => (DateTime?)b.BillDate)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return Ok(new
+            {
+                data = customers,
+                totalCount
+            });
+        }
 
 		[HttpGet("{id}/bills")]
 		public async Task<IActionResult> GetCustomerBills(int id)
@@ -81,5 +104,28 @@ namespace Billing.Api.Controllers
 
 			return Ok(response);
 		}
-	}
+
+        [HttpGet("totals")]
+        public async Task<IActionResult> GetCustomerTotals()
+        {
+            var customers = await _context.Customers
+                .Include(c => c.Bills)
+                .ToListAsync();
+
+            var totalCustomers = customers.Count;
+
+            var totalBills = customers.Sum(c => c.Bills.Count);
+
+            var totalPending = customers.Sum(c =>
+                c.Bills.Sum(b => b.BalanceAmount)
+            );
+
+            return Ok(new
+            {
+                totalCustomers,
+                totalBills,
+                totalPending
+            });
+        }
+    }
 }

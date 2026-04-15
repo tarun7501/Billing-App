@@ -21,8 +21,8 @@ export class BillService {
         return this.http.put<any>(`${this.baseUrl}/${id}/clear`, {});
     }
 
-    getAllBills(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/all`);
+    getBills(page: number, pageSize: number, search: string) {
+        return this.http.get<any>(`${this.baseUrl}/all?pageNumber=${page}&pageSize=${pageSize}&search=${search}`);
     }
 
     generateBillNumber() {

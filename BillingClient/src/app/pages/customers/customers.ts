@@ -32,6 +32,12 @@ export class Customers implements OnInit {
 
     totalBills: number = 0;
     totalPending: number = 0;
+    currentPage = 1;
+    pageSize = 10;
+    totalRecords = 0;
+    totalPages = 0;
+    searchTimeout: any;
+    totalCustomers: number = 0;
 
     constructor(
         private router: Router,
@@ -41,17 +47,21 @@ export class Customers implements OnInit {
 
     ngOnInit(): void {
         this.loadCustomers();
+        this.loadTotals();
     }
 
     loadCustomers() {
         this.isLoading = true;
 
-        this.customersService.getCustomerSummary().subscribe({
-            next: (data: Customer[]) => {
-                this.customers = data;
+        this.customersService.getCustomerSummary(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+            next: (res: any) => {
+                this.customers = res.data;
                 this.filteredCustomers = [...this.customers];
 
-                this.calculateTotals();
+                this.totalRecords = res.totalCount;
+                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+
+                // this.calculateTotals();
 
                 this.isLoading = false;
                 this.cdr.detectChanges();
@@ -64,20 +74,43 @@ export class Customers implements OnInit {
         });
     }
 
+    loadTotals() {
+    this.customersService.getCustomerTotals().subscribe({
+        next: (res) => {
+            this.totalCustomers = res.totalCustomers;
+            this.totalBills = res.totalBills;
+            this.totalPending = res.totalPending;
+            this.cdr.detectChanges();
+        }
+    });
+}
+
     calculateTotals() {
         this.totalBills = this.customers.reduce((sum, c) => sum + c.totalBills, 0);
         this.totalPending = this.customers.reduce((sum, c) => sum + c.pendingBalance, 0);
     }
 
     onSearchChange() {
-        const query = this.searchQuery.toLowerCase();
+        clearTimeout(this.searchTimeout);
 
-        this.filteredCustomers = this.customers.filter(
-            (customer) =>
-                customer.name.toLowerCase().includes(query) ||
-                customer.phone.includes(query) ||
-                customer.email?.toLowerCase().includes(query),
-        );
+        this.searchTimeout = setTimeout(() => {
+            this.currentPage = 1;
+            this.loadCustomers();
+        }, 400);
+    }
+
+    nextPage() {
+        if (this.currentPage * this.pageSize < this.totalRecords) {
+            this.currentPage++;
+            this.loadCustomers();
+        }
+    }
+
+    previousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.loadCustomers();
+        }
     }
 
     onViewCustomer(id: string) {

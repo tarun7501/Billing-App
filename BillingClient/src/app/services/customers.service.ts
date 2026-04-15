@@ -14,8 +14,12 @@ export class CustomersService {
 
     constructor(private http: HttpClient) {}
 
-    getCustomerSummary(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.baseUrl}/summary`);
+    getCustomerSummary(page: number, pageSize: number, search: string): Observable<any[]> {
+        return this.http.get<any[]>(`${this.baseUrl}/summary?pageNumber=${page}&pageSize=${pageSize}&search=${search}`);
+    }
+
+    getCustomerTotals() {
+        return this.http.get<any>(`${this.baseUrl}/totals`);
     }
 
     getCustomerBills(id: string): Observable<CustomerBillResponse> {
