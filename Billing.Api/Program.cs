@@ -67,12 +67,12 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 // Open browser automatically
-//var url = "http://localhost:5000";
+var url = "http://localhost:5000";
 
-//Process.Start(new ProcessStartInfo
-//{
-//    FileName = url,
-//    UseShellExecute = true
-//});
+Process.Start(new ProcessStartInfo
+{
+    FileName = url,
+    UseShellExecute = true
+});
 
 app.Run();
