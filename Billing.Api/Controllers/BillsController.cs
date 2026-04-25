@@ -49,14 +49,15 @@ namespace Billing.Api.Controllers
 				bill.Items.Add(new BillItem
 				{
 					PhotoServiceId = item.PhotoServiceId,
-					PhotoSizeId = item.PhotoSizeId,
-					LaminationTypeId = item.LaminationTypeId,
+                    PhotoSizeId = item.PhotoSizeId ?? null,
+                    LaminationTypeId = item.LaminationTypeId,
 					LaminationFinishId = item.LaminationFinishId,
 					SnapNumber = item.SnapNumber,
 					Quantity = item.Quantity,
 					UnitPrice = item.UnitPrice,
-					TotalPrice = item.Total
-				});
+					TotalPrice = item.Total,
+                    ItemName = item.ItemName
+                });
 			}
 
 			bill.SubTotalAmount = bill.Items.Sum(x => x.TotalPrice);
@@ -110,18 +111,19 @@ namespace Billing.Api.Controllers
 				{
 					Id = i.Id,
 					PhotoServiceId = i.PhotoServiceId,
-					PhotoServiceName = i.PhotoService.Name,
-					PhotoSizeId = i.PhotoSizeId,
-					PhotoSizeLabel = i.PhotoSize.Label,
-					LaminationTypeId = i.LaminationTypeId,
+                    PhotoServiceName = i.PhotoService != null? i.PhotoService.Name: i.ItemName,
+                    PhotoSizeId = i.PhotoSizeId,
+                    PhotoSizeLabel = i.PhotoSize != null? i.PhotoSize.Label: null,
+                    LaminationTypeId = i.LaminationTypeId,
 					LaminationTypeName = i.LaminationType?.Name,
 					LaminationFinishId = i.LaminationFinishId,
 					LaminationFinishName = i.LaminationFinish?.Name,
 					SnapNumber = i.SnapNumber,
 					Quantity = i.Quantity,
 					UnitPrice = i.UnitPrice,
-					TotalPrice = i.TotalPrice
-				}).ToList()
+					TotalPrice = i.TotalPrice,
+                    ItemName = i.ItemName
+                }).ToList()
 			};
 
 			return Ok(result);

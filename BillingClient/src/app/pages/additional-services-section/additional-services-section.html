@@ -1,0 +1,103 @@
+<div class="border-2 border-amber-200 rounded-lg bg-amber-50/30 mb-6">
+    
+    <!-- Header -->
+    <div class="flex justify-between items-center p-4 cursor-pointer" (click)="toggle()">
+        <div class="flex items-center gap-2">
+            <h3 class="font-semibold text-lg text-amber-800">
+                4. Additional Services
+            </h3>
+        </div>
+        <span>{{ open ? '▼' : '▶' }}</span>
+    </div>
+
+    <!-- Body -->
+    <div *ngIf="open" class="p-4 border-t border-amber-200 space-y-3">
+
+        <!-- Add Button -->
+        <button 
+            (click)="addRow()" 
+            class="px-3 py-1 border border-amber-300 rounded text-sm hover:bg-amber-100">
+            + Add Row
+        </button>
+
+        <!-- Rows -->
+        <div *ngFor="let item of items; let i = index"
+             class="bg-white rounded-lg p-4 border border-amber-200">
+
+            <div class="grid grid-cols-12 gap-3 items-start mb-3">
+
+                <!-- Description -->
+                <div class="col-span-5">
+                    <label class="text-xs font-medium text-slate-600">
+                        Service Description
+                    </label>
+                    <textarea
+                        [(ngModel)]="item.description"
+                        (input)="emitAll()"
+                        rows="2"
+                        placeholder="Enter service (Frame fixing, Editing...)"
+                        class="mt-1 w-full border rounded px-2 py-1 resize-none"
+                    ></textarea>
+                </div>
+
+                <!-- Quantity -->
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">
+                        Quantity
+                    </label>
+                    <input
+                        type="number"
+                        min="1"
+                        [(ngModel)]="item.qty"
+                        (input)="calculate(item)"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    />
+                </div>
+
+                <!-- Unit Price -->
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">
+                        Price
+                    </label>
+                    <input
+                        type="number"
+                        [(ngModel)]="item.unitPrice"
+                        (input)="calculate(item)"
+                        class="mt-1 w-full border rounded px-2 py-1"
+                    />
+                </div>
+
+                <!-- Total -->
+                <div class="col-span-2">
+                    <label class="text-xs font-medium text-slate-600">
+                        Row Total
+                    </label>
+                    <input
+                        type="number"
+                        [(ngModel)]="item.total"
+                        (input)="onTotalChange(item)"
+                        class="mt-1 w-full border rounded px-2 py-1 font-semibold"
+                    />
+                </div>
+
+                <!-- Delete -->
+                <div class="col-span-1 delete-btn">
+                    <button 
+                        (click)="remove(i)" 
+                        class="text-red-600 hover:text-red-800 mt-6">
+                        ✕
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="items.length === 0"
+             class="text-sm text-slate-500 text-center py-4">
+            No additional services added. Click "Add Row".
+        </div>
+
+    </div>
+</div>

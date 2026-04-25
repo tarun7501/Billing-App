@@ -118,12 +118,16 @@
             (subtotalChange)="studioSubtotal = $event"
         >
         </app-studio-photo-section>
-
         <app-lamination-photo-section
             (itemsChange)="onLaminationItemsChange($event, laminationSubtotal)"
             (subtotalChange)="laminationSubtotal = $event"
         >
         </app-lamination-photo-section>
+        <app-additional-services-section
+            (itemsChange)="onAdditionalServicesChange($event, additionalServiceSubtotal)"
+            (subtotalChange)="additionalServiceSubtotal = $event"
+        >
+        </app-additional-services-section>
     </div>
     <div class="bg-blue-50 border-2 border-blue-100 rounded-lg p-6 mt-6">
         <h2 class="text-lg font-semibold text-blue-900 mb-4">Billing Summary</h2>

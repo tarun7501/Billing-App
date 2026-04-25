@@ -7,8 +7,8 @@
 		public Bill Bill { get; set; } = null!;
 		public int PhotoServiceId { get; set; }
         public PhotoService PhotoService { get; set; } = null!;
-		public int PhotoSizeId { get; set; }
-		public PhotoSize PhotoSize { get; set; } = null!;
+        public int? PhotoSizeId { get; set; }
+        public PhotoSize PhotoSize { get; set; } = null!;
 		public int? LaminationTypeId { get; set; }
 		public LaminationType? LaminationType { get; set; }
 		public int? LaminationFinishId { get; set; }
@@ -17,5 +17,6 @@
 		public decimal UnitPrice { get; set; }
 		public decimal TotalPrice { get; set; }
 		public int? SnapNumber { get; set; }
-	}
+        public string? ItemName { get; set; }
+    }
 }

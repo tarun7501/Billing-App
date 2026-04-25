@@ -7,11 +7,12 @@ import { StudioPhotoSection } from '../studio-photo-section/studio-photo-section
 import { LaminationPhotoSection } from './../lamination-photo-section/lamination-photo-section';
 import { CreateBillItemPayload } from '../../models/bill.model';
 import { BillService } from '../../services/bill.service';
+import { AdditionalServicesSection } from '../additional-services-section/additional-services-section';
 
 @Component({
     selector: 'app-create-bill',
     standalone: true,
-    imports: [CommonModule, FormsModule, MobilePhotoSection, StudioPhotoSection, LaminationPhotoSection],
+    imports: [CommonModule, FormsModule, MobilePhotoSection, StudioPhotoSection, LaminationPhotoSection, AdditionalServicesSection],
     templateUrl: './create-bill.html',
     styleUrl: './create-bill.css',
 })
@@ -28,6 +29,7 @@ export class CreateBill implements OnInit {
     mobileSubtotal = 0;
     studioSubtotal = 0;
     laminationSubtotal = 0;
+    additionalServiceSubtotal = 0;
 
     discount = 0;
     advanceAmount = 0;
@@ -49,7 +51,7 @@ export class CreateBill implements OnInit {
     }
 
     get subtotal() {
-        return this.mobileSubtotal + this.studioSubtotal + this.laminationSubtotal;
+        return this.mobileSubtotal + this.studioSubtotal + this.laminationSubtotal + this.additionalServiceSubtotal;
     }
 
     get totalAmount() {
@@ -117,6 +119,11 @@ export class CreateBill implements OnInit {
     onLaminationItemsChange(items: CreateBillItemPayload[], subtotal: number) {
         this.replaceItems(3, items);
         this.laminationSubtotal = subtotal;
+    }
+    
+    onAdditionalServicesChange(items: CreateBillItemPayload[], subtotal: number) {
+        this.replaceItems(4, items);
+        this.additionalServiceSubtotal = subtotal;
     }
 
     private replaceItems(serviceId: number, items: CreateBillItemPayload[]) {

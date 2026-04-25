@@ -14,11 +14,12 @@ export interface CreateCustomerPayload {
 
 export interface CreateBillItemPayload {
     photoServiceId: number;
-    photoSizeId: number;
-    laminationTypeId?: number;
-    laminationFinishId?: number;
+    photoSizeId: number | null;
+    laminationTypeId?: number | null;
+    laminationFinishId?: number | null;
     quantity: number;
     unitPrice: number;
     snapNumber?: number;
     total: number;
+    itemName?: string;
 }

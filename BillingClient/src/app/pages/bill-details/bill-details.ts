@@ -1,3 +1,4 @@
+import { AdditionalServicesSection } from './../additional-services-section/additional-services-section';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +17,8 @@ interface BillItem {
     laminationType?: string;
     laminationFinish?: string;
     snapNumber?: number | null;
+    itemName?: string | null;
+    quantity?: number | null;
 }
 
 interface Bill {
@@ -34,6 +37,7 @@ interface Bill {
     mobilePhotoItems: BillItem[];
     studioPhotoItems: BillItem[];
     laminationItems: BillItem[];
+    additionalServicesItems: BillItem[];
     description?: string;
 }
 
@@ -100,6 +104,9 @@ export class BillDetails implements OnInit {
                     laminationItems: response.items
                         .filter((x: any) => x.photoServiceId === 3)
                         .map((item: any) => this.mapItem(item)),
+                    additionalServicesItems: response.items
+                        .filter((x: any) => x.photoServiceId === 4)
+                        .map((item: any) => this.mapItem(item)),
                 };
 
                 this.cdr.detectChanges();
@@ -124,6 +131,8 @@ export class BillDetails implements OnInit {
             laminationType: item.laminationTypeName,
             laminationFinish: item.laminationFinishName,
             snapNumber: item.snapNumber ?? null,
+            itemName: item.itemName ?? null,
+            quantity: item.quantity ?? null,
         };
     }
 
@@ -207,7 +216,8 @@ Thank you for choosing us. Your invoice details are below:
 🧾 Invoice No: ${this.bill.billNumber}
 📅 Date: ${new Date(this.bill.date).toLocaleDateString()}
 💰 Total Amount: ₹${this.bill.totalAmount}
-💵 Balance Amount: ₹${this.bill.balanceAmount}
+💵 Advance Amount: ₹${this.bill.advanceAmount}
+🧮 Balance Amount: ₹${this.bill.balanceAmount}
 
 📎 Your invoice has been attached for your reference.
 
