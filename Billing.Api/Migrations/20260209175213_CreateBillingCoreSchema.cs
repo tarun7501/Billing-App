@@ -181,12 +181,12 @@ namespace Billing.Api.Migrations
 				columns: new[] { "Id", "Label", "IsActive" },
 				values: new object[,]
 				{
-					{ 1, "4x6", true }, { 2, "5x7", true }, { 3, "6x9", true },
-					{ 4, "8x12", true }, { 5, "10x15", true }, { 6, "12x18", true },
-					{ 7, "16x24", true }, { 8, "20x24", true }, { 9, "20x30", true },
-					{ 10, "20x40", true }, { 11, "24x24", true }, { 12, "24x30", true },
-					{ 13, "24x36", true }, { 14, "24x40", true }
-				});
+                    { 1, "4x6", true }, { 2, "5x7", true }, { 3, "6x9", true },
+                    { 4, "8x12", true }, { 5, "10x15", true }, { 6, "12x18", true },
+                    { 7, "12x24", true }, { 8, "16x24", true }, { 9, "20x24", true },
+                    { 10, "20x30", true }, { 11, "20x40", true }, { 12, "24x24", true },
+                    { 13, "24x30", true }, { 14, "24x36", true }, { 15, "24x40", true }
+                });
 
 			migrationBuilder.InsertData(
 				table: "LaminationTypes",

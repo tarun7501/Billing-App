@@ -100,7 +100,7 @@ export class StudioPhotoSection {
                 photoSizeId: this.mapSizeToId(i.size),
                 snapNumber: i.snapNumber ?? undefined,
                 quantity: i.copies,
-                unitPrice: pricing.extraCopyPrice,
+                unitPrice: i.total/i.copies,
                 total: i.total,
             };
         });
